@@ -1,0 +1,4 @@
+interface:
+  display_name: "GPT Image 2"
+  short_description: "Gere imagens com preview e qualidade controlada"
+  default_prompt: "Use $gpt-image-2 para planejar e gerar uma imagem com previews baratos antes da imagem final."

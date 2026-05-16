@@ -1,0 +1,36 @@
+# Google Ads Ratos — Cadastro de Contas
+# O Codex le este arquivo para resolver nomes de clientes para customer IDs.
+#
+# Formato:
+# clientes:
+#   - nome: "Nome do Cliente"
+#     customer_id: "1234567890"  # sem hifens
+#     notas: "Opcional — qualquer observacao"
+
+clientes:
+  - nome: "EssentialWeb-MCC"
+    customer_id: "3202454490"
+    moeda: "BRL"
+    timezone: "America/Campo_Grande"
+    manager: true
+    notas: "Conta MCC de teste retornada pelo setup OAuth."
+  - nome: "EssentialWeb Test Ads"
+    customer_id: "7574792015"
+    moeda: "BRL"
+    timezone: "America/Campo_Grande"
+    manager: false
+    notas: "Conta cliente de teste padrao para validar scripts Google Ads."
+  - nome: "EssentialWeb-MCC Producao"
+    customer_id: "3980529580"
+    moeda: "BRL"
+    timezone: "America/Sao_Paulo"
+    manager: true
+    ambiente: "producao"
+    notas: "MCC real para uso futuro quando o developer token tiver acesso a producao."
+  - nome: "Essential Web - Ads Producao"
+    customer_id: "3196193007"
+    moeda: "BRL"
+    timezone: "America/Sao_Paulo"
+    manager: false
+    ambiente: "producao"
+    notas: "Conta real de anuncios; nao usar com developer token em modo teste."

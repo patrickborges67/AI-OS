@@ -1,0 +1,15 @@
+# GA4 Ratos — Cadastro de clientes
+# O Codex consulta este arquivo para resolver nomes de clientes para property IDs.
+#
+# Exemplo:
+# - nome: Meu Cliente
+#   property_id: "123456789"
+#   site: "exemplo.com.br"
+
+clientes:
+
+  # -- Teus clientes abaixo --
+
+  - nome: Essential Web site
+    property_id: "533408886"
+    site: "essentialweb.com.br"

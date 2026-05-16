@@ -1,97 +1,145 @@
-# Claude Code OS — Kit Ratos de IA
+# EssentialWeb - AI OS
 
-Este repositório é o kit de boas-vindas do curso Claude Code OS.
+## O que e esse workspace
 
-Se você acabou de clonar esse repositório:
-1. Rode `/setup` pra configurar o sistema pro seu negócio (uns 5 minutos)
-2. Depois rode `/mapear` pra criar skills personalizadas pro que você faz no dia a dia
+Workspace central da EssentialWeb para marketing, comercial, automacoes, projetos internos, contexto de negocio e criacao futura de skills reutilizaveis.
+
+**Estrutura de pastas:**
+- `_contexto/` - memoria do sistema: empresa, preferencias e foco atual.
+- `marca/` - identidade visual, logos e guia de design.
+- `marketing/` - carrosseis, posts, campanhas e referencias de conteudo.
+- `comercial/` - propostas, follow-ups, scripts comerciais e materiais de venda.
+- `clientes/` - um subdiretorio por cliente externo.
+- `automacoes/` - referencias e documentacao de fluxos n8n, WhatsApp e CRM.
+- `projetos/` - projetos internos/proprios da EssentialWeb, como site institucional e n8nCRM.
+- `dados/` - arquivos para analise, imports temporarios, PDFs, CSVs e imagens de apoio.
+- `templates/` - modelos reutilizaveis de skills, marca, ferramentas e perfis.
+- `.ai/workflows/` - workflows agnosticos do AI OS.
+- `.ai/skills/` - skills locais especificas deste workspace.
+- `tarefas.md` - lista de pendencias corrente.
+
+## Sobre o negocio
+
+A EssentialWeb e uma empresa brasileira de tecnologia fundada por Patrick, em Campo Grande, MS. Atua com chatbots com IA, sites, automacoes, sistemas e aplicacoes, atendendo clientes externos e organizando a propria operacao de marketing/comercial.
+
+## O que mais fazemos aqui
+
+- Planejamento e producao de conteudo de marketing.
+- Carrosseis, posts, campanhas e materiais comerciais.
+- Propostas, follow-ups e scripts de venda.
+- Organizacao de automacoes com n8n, WhatsApp e CRM.
+- Apoio a projetos tecnicos em Node.js/TypeScript, NestJS, React, Kotlin/Spring Boot, PostgreSQL, Redis, Docker e Cloudflare.
+
+## Clientes e contexto
+
+A operacao e solo, com atendimento a clientes externos por consultoria/projetos e projetos internos em `projetos/`. Projetos de clientes devem ficar em `clientes/[nome-cliente]/`; ativos proprios ficam em `projetos/`.
+
+## Tom de voz
+
+Portugues brasileiro, direto, tecnico quando necessario e pragmatico. Para marketing, escrever com angulo concreto, tensao real, clareza comercial e sem frases genericas de IA. Evitar padding, solucoes complexas sem necessidade e convencoes que nao ajudem o resultado.
+
+## Ferramentas conectadas
+
+- Codex / Claude Code
+- n8n self-hosted via MCP
+- Docker / Docker Compose
+- Git / GitHub Actions
+- Node.js, TypeScript, NestJS, React
+- PostgreSQL, Redis, RabbitMQ, BullMQ
+- Cloudflare, Traefik, Nginx
+- Playwright
 
 ---
 
-<!-- Este arquivo será atualizado pelo /setup com o contexto do seu negócio. -->
+## Contexto do negocio
 
-## Contexto do negócio
+No inicio de toda conversa, ler os seguintes arquivos, se existirem e estiverem configurados:
 
-No início de toda conversa, ler os seguintes arquivos (se existirem e estiverem configurados):
+1. `_contexto/empresa.md` - quem e o usuario, o que faz e como funciona o negocio.
+2. `_contexto/preferencias.md` - tom de voz, estilo de escrita e o que evitar.
+3. `_contexto/estrategia.md` - foco atual, prioridades e o que pode esperar.
 
-1. `_contexto/empresa.md` — quem é o usuário, o que faz, como funciona o negócio
-2. `_contexto/preferencias.md` — tom de voz, estilo de escrita, o que evitar
-3. `_contexto/estrategia.md` — foco atual, prioridades, o que pode esperar
+Use essas informacoes como base para qualquer resposta ou decisao. Ao sugerir prioridades, formatos ou abordagens, considere o foco atual descrito em `_contexto/estrategia.md`.
 
-Usar essas informações como base pra qualquer resposta ou decisão. Ao sugerir prioridades, formatos ou abordagens, considerar o foco atual descrito em `estrategia.md`.
+Para qualquer tarefa visual, como carrossel, proposta, slide ou landing page, consulte `marca/design-guide.md`.
 
-Para qualquer tarefa visual (carrossel, proposta, slide, landing page), consultar `marca/design-guide.md` como referência de estilo.
-
-Não é necessário listar o que foi lido nem confirmar a leitura. Apenas usar o contexto naturalmente.
+Nao e necessario listar o que foi lido nem confirmar a leitura. Use o contexto naturalmente.
 
 ---
 
 ## Fluxo de trabalho
 
-Antes de executar qualquer tarefa, verificar se existe uma skill relevante em `.claude/skills/` ou `.claude/commands/`.
-Se encontrar, seguir as instruções da skill.
-Se não encontrar, executar a tarefa normalmente.
+Antes de executar qualquer tarefa, verifique se existe um workflow ou skill relevante em:
 
-Ao concluir uma tarefa que não tinha skill mas parece repetível (o usuário provavelmente vai pedir de novo no futuro), perguntar:
+1. `.ai/workflows/`
+2. `.ai/skills/`
+3. `.claude/commands/` como fallback de compatibilidade
+4. `.claude/skills/` como fallback de compatibilidade
 
-> "Isso pode virar uma skill pra próxima vez. Quer que eu crie?"
+Se encontrar um workflow ou skill relevante, siga as instrucoes dele. Se nao encontrar, execute a tarefa normalmente.
 
-Não perguntar pra tarefas pontuais ou perguntas simples. Só quando o padrão de repetição for claro.
+Ao concluir uma tarefa que nao tinha skill mas parece repetivel, pergunte:
+
+> "Isso pode virar uma skill pra proxima vez. Quer que eu crie?"
+
+Nao pergunte para tarefas pontuais ou perguntas simples. So quando o padrao de repeticao for claro.
 
 ---
 
-## Aprender com correções
+## Aprender com correcoes
 
-Quando o usuário corrigir algo, melhorar uma resposta ou dar uma instrução que parece permanente (frases como "na verdade é assim", "não faça mais isso", "prefiro assim", "sempre que...", "evita...", "da próxima vez..."), perguntar:
+Quando Patrick corrigir algo, melhorar uma resposta ou der uma instrucao que parece permanente, pergunte:
 
-> "Quer que eu salve isso pra não precisar repetir?"
+> "Quer que eu salve isso pra nao precisar repetir?"
 
-Se sim, identificar onde faz mais sentido salvar:
+Se sim, identifique onde faz mais sentido salvar:
 
-- **Sobre o negócio** (quem são os clientes, como funciona a empresa, serviços, mercado) → adicionar em `_contexto/empresa.md`
-- **Sobre preferências e estilo** (tom de voz, formato de resposta, o que evitar, como estruturar textos) → adicionar em `_contexto/preferencias.md`
-- **Sobre prioridades e foco atual** (projetos em andamento, metas do momento, prazos importantes, o que é prioridade agora) → adicionar em `_contexto/estrategia.md`
-- **Regra de comportamento nessa pasta** (onde salvar arquivos, como nomear, fluxos específicos) → adicionar no próprio `CLAUDE.md`
+- Sobre o negocio: adicionar em `_contexto/empresa.md`
+- Sobre preferencias e estilo: adicionar em `_contexto/preferencias.md`
+- Sobre prioridades e foco atual: adicionar em `_contexto/estrategia.md`
+- Regra de comportamento nesta pasta: adicionar em `AI-OS.md`
 
 Salvar com uma linha nova clara, sem reformatar o arquivo inteiro. Confirmar o que foi salvo mostrando a linha adicionada.
 
-Não perguntar se a correção for óbvia de contexto imediato (ex: "na verdade o arquivo se chama X"). Só perguntar quando a informação tiver valor duradouro.
+Nao pergunte se a correcao for obvia de contexto imediato. So pergunte quando a informacao tiver valor duradouro.
 
 ---
 
 ## Manter contexto atualizado
 
-Ao terminar uma tarefa que mudou algo relevante no projeto (novo cliente, nova skill, mudança de foco, novo processo, ferramenta instalada, estrutura de pastas alterada), perguntar:
+Ao terminar uma tarefa que mudou algo relevante no projeto, como novo cliente, nova skill, mudanca de foco, novo processo, ferramenta instalada ou estrutura de pastas alterada, pergunte:
 
-> "Isso mudou algo no teu contexto. Quer que eu atualize os arquivos de memória?"
+> "Isso mudou algo no teu contexto. Quer que eu atualize os arquivos de memoria?"
 
-Se sim, identificar o que precisa atualizar:
+Se sim, identifique o que precisa atualizar:
 
-- **Novo cliente, serviço, ferramenta, equipe** → `_contexto/empresa.md`
-- **Mudança de prioridade ou foco** → `_contexto/estrategia.md`
-- **Correção de tom ou estilo** → `_contexto/preferencias.md`
-- **Nova pasta, regra de organização, skill criada** → `CLAUDE.md`
-- **Mudança visual (cores, fontes, logo)** → `marca/design-guide.md`
+- Novo cliente, servico, ferramenta ou equipe: `_contexto/empresa.md`
+- Mudanca de prioridade ou foco: `_contexto/estrategia.md`
+- Correcao de tom ou estilo: `_contexto/preferencias.md`
+- Nova pasta, regra de organizacao, workflow ou skill criada: `AI-OS.md`
+- Mudanca visual, cores, fontes ou logo: `marca/design-guide.md`
 
-Mostrar o que vai mudar antes de salvar. Não reformatar o arquivo inteiro, só adicionar ou editar a linha relevante.
-
-**Quando NÃO perguntar:**
-- Tarefas pontuais que não mudam o contexto (ex: escrever um email, criar um post avulso)
-- Perguntas simples ou conversas sem ação
-- Mudanças que já foram salvas pelo bloco "Aprender com correções"
-
-**Dica:** se não sabe se algo mudou, rode `/atualizar` pra uma varredura completa.
+Mostrar o que vai mudar antes de salvar. Nao reformatar o arquivo inteiro; adicione ou edite apenas a linha relevante.
 
 ---
 
-## Criação de skills
+## Criacao de skills
 
-Quando o usuário pedir pra criar uma nova skill:
+Quando Patrick pedir para criar uma nova skill:
 
-1. Verificar se existe um template relevante em `templates/skills/`. Se existir, usar como base e adaptar pro contexto do usuário
-2. Perguntar: "Essa skill é específica pra esse projeto ou vai ser útil em qualquer projeto?"
-   - Específica desse negócio → salvar em `.claude/skills/nome-da-skill/SKILL.md` (local)
-   - Útil em qualquer projeto → salvar em `~/.claude/skills/nome-da-skill/SKILL.md` (global)
-3. Ler `_contexto/empresa.md` e `_contexto/preferencias.md` pra calibrar o conteúdo da skill ao contexto do negócio
-4. Se a skill precisar de arquivos de apoio (templates, referências, exemplos), criar dentro da pasta da skill
-5. Seguir o fluxo da skill-creator nativa do Claude Code
+1. Verificar se existe um template relevante em `templates/skills/`. Se existir, usar como base e adaptar.
+2. Perguntar: "Essa skill e especifica pra esse projeto ou vai ser util em qualquer projeto?"
+3. Se for especifica deste negocio, salvar em `.ai/skills/nome-da-skill/SKILL.md`.
+4. Se for util em qualquer projeto, salvar no local global suportado pelo agente atual. Se nao houver local global, salvar em `.ai/skills/` e documentar a limitacao.
+5. Ler `_contexto/empresa.md` e `_contexto/preferencias.md` para calibrar o conteudo.
+6. Se a skill precisar de arquivos de apoio, criar dentro da pasta da skill.
+
+---
+
+## Regras especificas deste workspace
+
+- Projetos internos/proprios ficam em `projetos/`.
+- Projetos de clientes ficam em `clientes/[nome-cliente]/`.
+- Conteudo social finalizado fica em `marketing/`.
+- Estrategia e copy de follow-up ficam em `comercial/follow-ups/`; implementacoes automatizadas ficam em `automacoes/`.
+- `projetos/carrosseis claude/` e referencia temporaria para uma futura skill de carrosseis; outputs finais devem migrar para `marketing/carrosseis/`.

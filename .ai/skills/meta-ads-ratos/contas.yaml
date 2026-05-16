@@ -1,0 +1,55 @@
+# ============================================================================
+# Meta Ads Ratos — Cadastro de Contas
+# ============================================================================
+#
+# Preencha este arquivo com as contas de anuncio, paginas e perfis do
+# Instagram de cada cliente. O Claude consulta este arquivo automaticamente
+# quando voce mencionar o nome do cliente (ex: "cria campanha pra DobraLabs").
+#
+# Dica: rode `read.py accounts` pra ver todas as contas disponiveis.
+#
+# Estrutura:
+#   - slug unico (sem espacos, lowercase)
+#     - nome de exibicao
+#     - conta de anuncio (act_XXX)
+#     - pagina do Facebook (page_id)
+#     - conta do Instagram (instagram_actor_id)
+#     - moeda
+#     - notas opcionais
+#
+# ============================================================================
+
+clientes:
+
+  # -- Exemplo (descomente e edite) --
+  #
+  # meu-cliente:
+  #   nome: "Nome do Cliente"
+  #   conta_anuncio: "act_XXXXXXXXX"
+  #   pagina_facebook: "XXXXXXXXX"
+  #   instagram_id: "XXXXXXXXX"
+  #   instagram_username: "@username"
+  #   moeda: "BRL"
+  #   notas: "qualquer observacao relevante"
+
+  # -- Suas contas abaixo --
+
+  essentialweb:
+    nome: "EssentialWeb"
+    conta_anuncio: "act_1306638014333858"
+    pagina_facebook: "787934701069898"
+    instagram_id: "17841475220467556"
+    instagram_username: "@essentialweb_br"
+    pixel_id: "957417780098573"
+    pixel_chatbots_id: "872873935769143"
+    moeda: "BRL"
+    notas: "Conta principal de anuncios da EssentialWeb. Business: Essential Web. Pixel padrao do site e pixel especifico da pagina /chatbots cadastrados."
+
+  patrick-borges:
+    nome: "Patrick Borges"
+    conta_anuncio: "act_495675287891204"
+    pagina_facebook: ""
+    instagram_id: ""
+    instagram_username: ""
+    moeda: "BRL"
+    notas: "Conta de anuncio ativa vinculada ao business Essential Web; sem pagina/Instagram confirmados no setup."

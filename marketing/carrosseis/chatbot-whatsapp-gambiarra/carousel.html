@@ -1,0 +1,524 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Chatbot no WhatsApp deixou de ser gambiarra</title>
+  <style>
+    @font-face {
+      font-family: "Barlow Condensed";
+      src: url("assets/fonts/barlow-condensed-900.woff2") format("woff2");
+      font-weight: 900;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: "Plus Jakarta Sans";
+      src: url("assets/fonts/plus-jakarta-400.woff2") format("woff2");
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: "Plus Jakarta Sans";
+      src: url("assets/fonts/plus-jakarta-700.woff2") format("woff2");
+      font-weight: 700;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: "Plus Jakarta Sans";
+      src: url("assets/fonts/plus-jakarta-800.woff2") format("woff2");
+      font-weight: 800;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    :root {
+      --ink: #081311;
+      --ink-2: #0d1715;
+      --mint: #17b7a6;
+      --mint-light: #71e4d8;
+      --paper: #edf6f4;
+      --line: rgba(8, 19, 17, 0.12);
+      --saffron: hsl(45 90% 57%);
+      --grad: linear-gradient(165deg, #081311 0%, #17b7a6 55%, #71e4d8 100%);
+      --head: "Barlow Condensed", Impact, sans-serif;
+      --body: "Plus Jakarta Sans", "Segoe UI", sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: #101614;
+      color: white;
+      font-family: var(--body);
+    }
+    .toolbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      padding: 14px;
+      background: rgba(8, 19, 17, 0.88);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+    .toolbar button {
+      border: 1px solid rgba(113, 228, 216, 0.35);
+      background: rgba(23, 183, 166, 0.12);
+      color: white;
+      font: 700 14px var(--body);
+      padding: 10px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    .slides-wrap {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 18px;
+      justify-content: center;
+      max-width: 1500px;
+      margin: 0 auto;
+      padding: 28px 18px 60px;
+    }
+    body.full .slides-wrap {
+      display: block;
+      max-width: none;
+      padding: 28px 0 80px;
+    }
+    .slide-frame {
+      width: 324px;
+      height: 405px;
+      flex: 0 0 324px;
+      overflow: hidden;
+      border-radius: 8px;
+      background: #000;
+      box-shadow: 0 18px 50px rgba(0,0,0,0.34);
+    }
+    body.full .slide-frame {
+      width: 1080px;
+      height: 1350px;
+      margin: 0 auto 28px;
+      border-radius: 0;
+      box-shadow: none;
+    }
+    .slide {
+      position: relative;
+      width: 1080px;
+      height: 1350px;
+      overflow: hidden;
+      transform: scale(0.3);
+      transform-origin: top left;
+      background: var(--paper);
+    }
+    body.full .slide { transform: none; }
+
+    .accent-bar {
+      position: absolute;
+      inset: 0 0 auto;
+      height: 7px;
+      background: var(--grad);
+      z-index: 30;
+    }
+    .brand-bar {
+      position: absolute;
+      top: 7px;
+      left: 0;
+      right: 0;
+      z-index: 20;
+      display: flex;
+      justify-content: flex-end;
+      padding: 32px 56px 0;
+      font: 700 14px/1 var(--body);
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+    }
+    .on-light .brand-bar { color: rgba(8, 19, 17, 0.45); }
+    .on-dark .brand-bar,
+    .on-grad .brand-bar { color: rgba(255,255,255,0.50); }
+    .content {
+      position: absolute;
+      z-index: 10;
+      top: 110px;
+      left: 56px;
+      right: 56px;
+      bottom: 88px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding-bottom: 38px;
+    }
+    .tag {
+      margin-bottom: 24px;
+      font: 800 13px/1 var(--body);
+      letter-spacing: 3px;
+      text-transform: uppercase;
+    }
+    .on-light .tag { color: var(--mint); }
+    .on-dark .tag { color: var(--mint-light); }
+    .on-grad .tag { color: rgba(255,255,255,0.62); }
+    .prog {
+      position: absolute;
+      z-index: 20;
+      left: 56px;
+      right: 56px;
+      bottom: 30px;
+      display: flex;
+      gap: 16px;
+      align-items: center;
+    }
+    .prog-track {
+      flex: 1;
+      height: 3px;
+      border-radius: 3px;
+      overflow: hidden;
+    }
+    .prog-fill { height: 100%; border-radius: inherit; }
+    .prog-num { font: 700 15px/1 var(--body); }
+    .on-light .prog-track { background: rgba(8, 19, 17, 0.10); }
+    .on-light .prog-fill { background: var(--mint); }
+    .on-light .prog-num { color: rgba(8, 19, 17, 0.28); }
+    .on-dark .prog-track { background: rgba(255,255,255,0.12); }
+    .on-dark .prog-fill { background: white; }
+    .on-dark .prog-num { color: rgba(255,255,255,0.28); }
+    .on-grad .prog-track { background: rgba(255,255,255,0.16); }
+    .on-grad .prog-fill { background: rgba(255,255,255,0.72); }
+    .on-grad .prog-num { color: rgba(255,255,255,0.38); }
+
+    .slide-capa { background: #000; }
+    .capa-bg {
+      position: absolute;
+      inset: 0;
+      background: url("assets/cover-final.png") center / cover no-repeat;
+    }
+    .capa-grad {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 78% 22%, rgba(23,183,166,0.20), transparent 34%),
+        linear-gradient(to bottom, rgba(0,0,0,0.10) 0%, rgba(0,0,0,0.18) 36%, rgba(0,0,0,0.72) 62%, rgba(0,0,0,0.98) 100%);
+    }
+    .capa-headline-area {
+      position: absolute;
+      z-index: 12;
+      left: 52px;
+      right: 52px;
+      bottom: 118px;
+    }
+    .capa-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 14px;
+      width: fit-content;
+      margin-bottom: 32px;
+      padding: 12px 25px 12px 12px;
+      border: 1.5px solid rgba(255,255,255,0.14);
+      border-radius: 999px;
+      background: rgba(0,0,0,0.44);
+      backdrop-filter: blur(12px);
+    }
+    .badge-logo {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: #fff url("assets/logo-essentialweb.png") center / contain no-repeat;
+      border: 1px solid rgba(255,255,255,0.6);
+    }
+    .badge-handle {
+      font: 800 22px/1 var(--body);
+      color: #fff;
+      letter-spacing: 0.1px;
+    }
+    .capa-headline {
+      max-width: 920px;
+      font: 900 104px/0.93 var(--head);
+      letter-spacing: 0;
+      text-transform: uppercase;
+      color: white;
+    }
+    .capa-headline em {
+      color: var(--mint-light);
+      font-style: normal;
+    }
+
+    .slide-dark { background: var(--ink); }
+    .slide-light { background: var(--paper); }
+    .slide-grad { background: var(--grad); }
+    .slide-img-bg {
+      position: absolute;
+      inset: 0;
+      background: center / cover no-repeat;
+      z-index: 0;
+    }
+    .slide-img-overlay {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      background: linear-gradient(90deg, rgba(8,19,17,0.88) 0%, rgba(8,19,17,0.72) 46%, rgba(8,19,17,0.36) 100%),
+                  linear-gradient(to bottom, rgba(8,19,17,0.22), rgba(8,19,17,0.92));
+    }
+    .h1-dark, .h1-light, .h1-grad {
+      font-family: var(--head);
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0;
+      margin: 0 0 34px;
+    }
+    .h1-dark {
+      color: white;
+      font-size: 78px;
+      line-height: 0.98;
+    }
+    .h1-light {
+      color: var(--ink);
+      font-size: 72px;
+      line-height: 1;
+    }
+    .h1-grad {
+      color: white;
+      font-size: 84px;
+      line-height: 0.98;
+    }
+    .h1-dark em, .h1-light em, .h1-grad em {
+      color: var(--mint-light);
+      font-style: normal;
+    }
+    .h1-light em { color: var(--mint); }
+    .body-dark, .body-light, .body-grad {
+      margin: 0;
+      font-family: var(--body);
+      font-size: 38px;
+      line-height: 1.5;
+      letter-spacing: 0;
+    }
+    .body-dark { color: rgba(255,255,255,0.58); }
+    .body-light { color: rgba(8,19,17,0.62); }
+    .body-grad { color: rgba(8,19,17,0.72); }
+    strong { font-weight: 800; }
+    .body-dark strong { color: white; }
+    .body-grad strong { color: var(--ink); }
+    .body-light strong { color: var(--ink); }
+    .body-dark + .body-dark,
+    .body-light + .body-light,
+    .body-grad + .body-grad { margin-top: 28px; }
+    .big-num {
+      position: absolute;
+      right: -20px;
+      bottom: 42px;
+      z-index: 1;
+      font: 900 360px/1 var(--head);
+      color: rgba(255,255,255,0.045);
+      pointer-events: none;
+    }
+    .light-card, .dark-card {
+      border-radius: 18px;
+      padding: 46px 50px;
+    }
+    .light-card {
+      background: white;
+      border-left: 7px solid var(--mint);
+      box-shadow: 0 18px 60px rgba(8,19,17,0.08);
+    }
+    .dark-card {
+      background: rgba(255,255,255,0.045);
+      border-left: 7px solid var(--mint);
+    }
+    .proof-shot {
+      width: 100%;
+      margin: 0 0 34px;
+      padding: 18px;
+      border-radius: 18px;
+      background: white;
+      border: 1px solid var(--line);
+      box-shadow: 0 22px 70px rgba(8,19,17,0.14);
+    }
+    .proof-shot img {
+      display: block;
+      width: 100%;
+      border-radius: 10px;
+    }
+    .signature {
+      margin-top: 54px;
+      padding-top: 28px;
+      border-top: 3px solid rgba(23,183,166,0.28);
+      font: 800 24px/1.35 var(--body);
+      color: rgba(8,19,17,0.46);
+    }
+    .signature strong {
+      display: block;
+      margin-bottom: 10px;
+      font: 900 42px/1 var(--head);
+      color: var(--mint);
+      text-transform: uppercase;
+      letter-spacing: 0;
+    }
+    .source-note {
+      margin-top: -18px;
+      margin-bottom: 26px;
+      font: 700 16px/1.4 var(--body);
+      color: rgba(8,19,17,0.38);
+    }
+    .on-dark .source-note {
+      color: rgba(255,255,255,0.34);
+    }
+    .on-grad .source-note {
+      color: rgba(8,19,17,0.42);
+    }
+  </style>
+</head>
+<body>
+  <div class="toolbar">
+    <button type="button" onclick="document.body.classList.toggle('full')">Alternar preview / tamanho real</button>
+  </div>
+
+  <main class="slides-wrap">
+    <section class="slide-frame">
+      <div class="slide slide-capa on-dark" id="slide-1">
+        <div class="capa-bg"></div>
+        <div class="capa-grad"></div>
+        <div class="accent-bar"></div>
+        <div class="capa-headline-area">
+          <div class="capa-badge">
+            <div class="badge-logo"></div>
+            <div class="badge-handle">@essentialweb_br</div>
+          </div>
+          <div class="capa-headline">Chatbot no WhatsApp <em>deixou de ser gambiarra</em></div>
+        </div>
+        <div class="prog on-dark"><div class="prog-track"><div class="prog-fill" style="width: 11.11%"></div></div><div class="prog-num">1/9</div></div>
+      </div>
+    </section>
+
+    <section class="slide-frame">
+      <div class="slide slide-dark on-dark" id="slide-2">
+        <div class="accent-bar"></div>
+        <div class="brand-bar">@essentialweb_br | 2026</div>
+        <div class="big-num">02</div>
+        <div class="content">
+          <div class="tag">O PROBLEMA</div>
+          <h1 class="h1-dark">Respostas prontas <em>não são inteligência</em></h1>
+          <p class="body-dark">O mercado passou anos tratando WhatsApp como um lugar para empilhar respostas prontas e chamar aquilo de <strong>inteligência</strong>.</p>
+          <p class="body-dark">Só que a conversa real quase nunca respeita o desenho bonito do fluxo.</p>
+        </div>
+        <div class="prog on-dark"><div class="prog-track"><div class="prog-fill" style="width: 22.22%"></div></div><div class="prog-num">2/9</div></div>
+      </div>
+    </section>
+
+    <section class="slide-frame">
+      <div class="slide slide-light on-light" id="slide-3">
+        <div class="accent-bar"></div>
+        <div class="brand-bar">@essentialweb_br | 2026</div>
+        <div class="content">
+          <div class="tag">O COMEÇO</div>
+          <h1 class="h1-light">O bot ruim parece funcionar <em>no começo</em></h1>
+          <div class="light-card">
+            <p class="body-light">Um bot ruim parece funcionar nos primeiros minutos, porque responde rápido e dá sensação de atendimento organizado.</p>
+            <p class="body-light">Depois o cliente faz o que todo cliente faz: <strong>muda o rumo da conversa</strong>.</p>
+          </div>
+        </div>
+        <div class="prog on-light"><div class="prog-track"><div class="prog-fill" style="width: 33.33%"></div></div><div class="prog-num">3/9</div></div>
+      </div>
+    </section>
+
+    <section class="slide-frame">
+      <div class="slide slide-dark on-dark" id="slide-4">
+        <div class="slide-img-bg" style="background-image: url('assets/broken-flow-final.png')"></div>
+        <div class="slide-img-overlay"></div>
+        <div class="accent-bar"></div>
+        <div class="brand-bar">@essentialweb_br | 2026</div>
+        <div class="content">
+          <div class="tag">A QUEBRA</div>
+          <h1 class="h1-dark">A conversa real <em>quebra o fluxo</em></h1>
+          <p class="body-dark">Ele pede preço, manda áudio, manda imagem, pergunta prazo, some, volta dois dias depois e espera que a empresa ainda entenda o contexto.</p>
+          <p class="body-dark">É nesse ponto que o fluxo pronto mostra o limite: ele sabe responder uma pergunta, mas não sabe carregar uma operação.</p>
+        </div>
+        <div class="prog on-dark"><div class="prog-track"><div class="prog-fill" style="width: 44.44%"></div></div><div class="prog-num">4/9</div></div>
+      </div>
+    </section>
+
+    <section class="slide-frame">
+      <div class="slide slide-light on-light" id="slide-5">
+        <div class="accent-bar"></div>
+        <div class="brand-bar">@essentialweb_br | 2026</div>
+        <div class="content">
+          <div class="tag">O MECANISMO</div>
+          <h1 class="h1-light">Atendimento exige <em>sistema</em></h1>
+          <div class="light-card">
+            <p class="body-light">Atendimento real precisa de entrada, qualificação, histórico, prioridade, responsável, fallback humano e continuidade comercial.</p>
+            <p class="body-light">Quando isso não existe, a automação vira uma camada bonita em cima do caos.</p>
+          </div>
+        </div>
+        <div class="prog on-light"><div class="prog-track"><div class="prog-fill" style="width: 55.55%"></div></div><div class="prog-num">5/9</div></div>
+      </div>
+    </section>
+
+    <section class="slide-frame">
+      <div class="slide slide-dark on-dark" id="slide-6">
+        <div class="accent-bar"></div>
+        <div class="brand-bar">@essentialweb_br | 2026</div>
+        <div class="big-num">06</div>
+        <div class="content">
+          <div class="tag">A VIRADA</div>
+          <h1 class="h1-dark">O WhatsApp virou <em>canal de venda</em></h1>
+          <div class="dark-card">
+            <p class="body-dark">Em 2025, a Meta afirmou que mais de dois bilhões de pessoas usam WhatsApp todos os dias e que milhões conversam com empresas pelo app.</p>
+            <p class="body-dark">Na pesquisa com MPMEs, 74% das empresas brasileiras disseram que ferramentas da Meta ajudam a gerar novas oportunidades de venda. O WhatsApp Business foi citado por <strong>91%</strong>.</p>
+          </div>
+          <div class="source-note" style="margin-top: 22px; margin-bottom: 0;">Fontes: Meta Newsroom, 2025; Meta/Morning Consult, dez. 2024.</div>
+        </div>
+        <div class="prog on-dark"><div class="prog-track"><div class="prog-fill" style="width: 66.66%"></div></div><div class="prog-num">6/9</div></div>
+      </div>
+    </section>
+
+    <section class="slide-frame">
+      <div class="slide slide-light on-light" id="slide-7">
+        <div class="accent-bar"></div>
+        <div class="brand-bar">@essentialweb_br | 2026</div>
+        <div class="content">
+          <div class="proof-shot">
+            <img src="assets/tech-provider-meta.png" alt="Verificação da EssentialWeb como provedora de tecnologia da Meta">
+          </div>
+          <div class="source-note">Fonte: painel de verificação de acesso da Meta, 2026.</div>
+          <div class="tag">A CREDENCIAL</div>
+          <h1 class="h1-light">Provedora de tecnologia <em>da Meta</em></h1>
+          <p class="body-light">Foi nesse contexto que a EssentialWeb foi verificada como provedora de tecnologia da Meta.</p>
+          <p class="body-light">A credencial importa pelo tipo de operação que ela exige: integração, conformidade e responsabilidade técnica.</p>
+        </div>
+        <div class="prog on-light"><div class="prog-track"><div class="prog-fill" style="width: 77.77%"></div></div><div class="prog-num">7/9</div></div>
+      </div>
+    </section>
+
+    <section class="slide-frame">
+      <div class="slide slide-grad on-grad" id="slide-8">
+        <div class="accent-bar"></div>
+        <div class="brand-bar">@essentialweb_br | 2026</div>
+        <div class="content">
+          <div class="tag">O PRÓXIMO PASSO</div>
+          <h1 class="h1-grad">Antes da IA, vem a operação</h1>
+          <p class="body-grad">Em 2024, a Meta apresentou no Brasil IA, pagamentos e PIX para empresas dentro do WhatsApp.</p>
+          <p class="body-grad">A direção é clara: <strong>atendimento, dados, vendas e automação</strong> estão entrando no mesmo canal.</p>
+          <div class="source-note" style="margin-top: 22px; margin-bottom: 0;">Fonte: Meta Conversations, São Paulo, 2024.</div>
+        </div>
+        <div class="prog on-grad"><div class="prog-track"><div class="prog-fill" style="width: 88.88%"></div></div><div class="prog-num">8/9</div></div>
+      </div>
+    </section>
+
+    <section class="slide-frame">
+      <div class="slide slide-light on-light" id="slide-9">
+        <div class="accent-bar"></div>
+        <div class="brand-bar">@essentialweb_br | 2026</div>
+        <div class="content">
+          <div class="tag">ESSENTIALWEB</div>
+          <h1 class="h1-light">Improviso no WhatsApp começa a <em>custar caro.</em></h1>
+          <p class="body-light">Atendimento no WhatsApp precisa de contexto, integração e continuidade comercial.</p>
+          <p class="body-light">A resposta rápida abre a conversa. A operação decide se ela vira próximo passo.</p>
+          <div class="signature"><strong>A conversa é só a parte visível.</strong>A EssentialWeb estrutura IA, automação e integração por trás do atendimento.</div>
+        </div>
+        <div class="prog on-light"><div class="prog-track"><div class="prog-fill" style="width: 100%"></div></div><div class="prog-num">9/9</div></div>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

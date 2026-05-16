@@ -1,0 +1,78 @@
+﻿# ============================================================================
+# Ads Ratos - Cadastro de Contas
+# ============================================================================
+#
+# Arquivo unificado a partir das skills locais:
+# - .ai/skills/meta-ads-ratos/contas.yaml
+# - .ai/skills/google-ads-ratos/contas.yaml
+# - .ai/skills/ga4-ratos/contas.yaml
+#
+# O Codex consulta este arquivo para resolver nomes de clientes para IDs de
+# Meta Ads, Google Ads e GA4 ao executar diagnosticos, relatorios e auditorias.
+#
+# ============================================================================
+
+clientes:
+
+  essentialweb:
+    nome: "EssentialWeb"
+    nicho: "tecnologia"
+    meta:
+      conta_anuncio: "act_1306638014333858"
+      pagina_facebook: "787934701069898"
+      instagram_id: "17841475220467556"
+      instagram_username: "@essentialweb_br"
+      pixel_id: "957417780098573"
+      pixel_chatbots_id: "872873935769143"
+    google:
+      customer_id: "3196193007"
+      ambiente: "producao"
+    ga4:
+      property_id: "533408886"
+      site: "essentialweb.com.br"
+    moeda: "BRL"
+    timezone: "America/Sao_Paulo"
+    notas: "Conta principal da EssentialWeb; mescla Meta Ads, Google Ads producao e GA4. Nao usar Google Ads producao enquanto o developer token estiver em modo teste."
+
+  patrick-borges:
+    nome: "Patrick Borges"
+    nicho: "marca pessoal"
+    meta:
+      conta_anuncio: "act_495675287891204"
+      pagina_facebook: ""
+      instagram_id: ""
+      instagram_username: ""
+    moeda: "BRL"
+    timezone: "America/Sao_Paulo"
+    notas: "Conta de anuncio ativa vinculada ao business Essential Web; sem pagina/Instagram confirmados no setup."
+
+  essentialweb-test-ads:
+    nome: "EssentialWeb Test Ads"
+    nicho: "tecnologia"
+    google:
+      customer_id: "7574792015"
+      ambiente: "teste"
+      manager: false
+    moeda: "BRL"
+    timezone: "America/Campo_Grande"
+    notas: "Conta cliente de teste padrao para validar scripts Google Ads."
+
+  essentialweb-mcc:
+    nome: "EssentialWeb-MCC"
+    google:
+      customer_id: "3202454490"
+      ambiente: "teste"
+      manager: true
+    moeda: "BRL"
+    timezone: "America/Campo_Grande"
+    notas: "Conta MCC de teste retornada pelo setup OAuth."
+
+  essentialweb-mcc-producao:
+    nome: "EssentialWeb-MCC Producao"
+    google:
+      customer_id: "3980529580"
+      ambiente: "producao"
+      manager: true
+    moeda: "BRL"
+    timezone: "America/Sao_Paulo"
+    notas: "MCC real para uso futuro quando o developer token tiver acesso a producao."

@@ -1,15 +1,18 @@
-# Variáveis de ambiente (API keys, tokens — NUNCA commitar)
+# Variaveis de ambiente (API keys, tokens - NUNCA commitar)
 .env
 .env.local
 .env.*
 
-# Arquivo gerado pelo /setup com MCPs específicos do usuário
+# Arquivo gerado pelo /setup com MCPs especificos do usuario
 _configurar-mcps.md
 
-# Outputs de renderização (binários pesados)
+# Artefatos temporarios de validacao local
+.codex-gpt-image-free-validation/
+
+# Outputs de renderizacao (binarios pesados)
 *.png
 
-# Arquivos de dados do usuário (CSVs, planilhas, etc)
+# Arquivos de dados do usuario (CSVs, planilhas, etc)
 dados/*.csv
 dados/*.xlsx
 dados/*.xls
@@ -18,7 +21,7 @@ dados/*.pdf
 dados/*.json
 !dados/README.md
 
-# Pastas de trabalho do usuário (geradas pelo /setup, conteúdo pessoal)
+# Pastas de trabalho do usuario (geradas pelo /setup, conteudo pessoal)
 clientes/
 propostas/
 conteudo/
@@ -34,3 +37,5 @@ tarefas.md
 # Sistema
 .DS_Store
 node_modules/
+__pycache__/
+*.pyc

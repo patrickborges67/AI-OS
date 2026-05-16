@@ -1,0 +1,7 @@
+interface:
+  display_name: "GA4 Ratos"
+  short_description: "Consulta métricas e relatórios do GA4"
+  default_prompt: "Use $ga4-ratos para consultar sessões, usuários, landing pages, UTMs, conversões e dados em tempo real do GA4."
+
+policy:
+  allow_implicit_invocation: true
