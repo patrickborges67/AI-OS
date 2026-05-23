@@ -119,8 +119,8 @@ Se o modo for **Projeto limpo/standalone**, criar/copiar:
   AI-OS.md
   AGENTS.md
   CLAUDE.md
-  .ai/
-    workflows/
+  .claude/
+    commands/
     skills/
   _contexto/
     empresa.md
@@ -134,8 +134,8 @@ Se o modo for **Projeto limpo/standalone**, criar/copiar:
 
 Regras para copiar a base:
 
-- Copiar `.ai/workflows/` inteiro.
-- Copiar `.ai/skills/` inteiro.
+- Copiar `.claude/commands/` inteiro.
+- Copiar `.claude/skills/` inteiro.
 - Excluir segredos e artefatos: `.env`, `.env.*`, `node_modules/`, `dist/`, `build/`, `__pycache__/`, `*.pyc`, `*.log`, caches e outputs gerados.
 - Nao copiar `contas.yaml` com IDs reais por padrao. Para skills que precisam de contas, criar `contas.example.yaml` ou deixar instrucao de setup.
 - Copiar `AI-OS.md` e `AGENTS.md`.

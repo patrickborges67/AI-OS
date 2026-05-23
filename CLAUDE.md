@@ -14,7 +14,7 @@ Workspace central da EssentialWeb para marketing, comercial, automacoes, projeto
 - `projetos/` - projetos internos/proprios da EssentialWeb, como site institucional e n8nCRM.
 - `dados/` - arquivos para analise, imports temporarios, PDFs, CSVs e imagens de apoio.
 - `templates/` - modelos reutilizaveis de skills, marca, ferramentas e perfis.
-- `.ai/workflows/` - workflows agnosticos do AI OS.
+- `.claude/commands/` - slash commands de processo do AI OS (versionados no git, invocaveis por /comando).
 - `.claude/skills/` - skills locais especificas deste workspace (versionadas no git, carregadas automaticamente).
 - `.env` - segredos e tokens compartilhados pelas skills (raiz do projeto, fora do git).
 - `tarefas.md` - lista de pendencias corrente.
@@ -70,13 +70,12 @@ Nao e necessario listar o que foi lido nem confirmar a leitura. Use o contexto n
 
 ## Fluxo de trabalho
 
-Antes de executar qualquer tarefa, verifique se existe um workflow ou skill relevante em:
+Antes de executar qualquer tarefa, verifique se existe um command ou skill relevante em:
 
-1. `.ai/workflows/`
+1. `.claude/commands/` - slash commands de processo (/iniciar, /setup, /mapear, /atualizar, /novo-projeto, /syncar)
 2. `.claude/skills/`
-3. `.claude/commands/` como fallback de compatibilidade
 
-Se encontrar um workflow ou skill relevante, siga as instrucoes dele. Se nao encontrar, execute a tarefa normalmente.
+Se encontrar um command ou skill relevante, siga as instrucoes dele. Se nao encontrar, execute a tarefa normalmente.
 
 Ao concluir uma tarefa que nao tinha skill mas parece repetivel, pergunte:
 

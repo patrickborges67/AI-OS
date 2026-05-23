@@ -7,12 +7,12 @@ Este workspace organiza contexto, workflows e skills de forma agnóstica para ag
 Alguns arquivos vieram do Claude Code OS. Ao executar este workspace em qualquer agente, aplique estes aliases:
 
 - `CLAUDE.md` significa `AI-OS.md`
-- `/setup`, `/mapear`, `/atualizar`, `/iniciar`, `/novo-projeto` e `/syncar` significam executar o workflow Markdown correspondente em `.ai/workflows/`
+- `/setup`, `/mapear`, `/atualizar`, `/iniciar`, `/novo-projeto` e `/syncar` sao slash commands em `.claude/commands/` (invocaveis diretamente por /comando)
 - "skill-creator nativa do Claude Code" significa usar a melhor capacidade disponível do agente para criar uma skill estruturada em `SKILL.md`
 - "WebFetch" significa usar a capacidade disponível para buscar conteúdo web, quando o ambiente permitir
 - "MCP" significa conector, ferramenta externa ou servidor MCP disponível no ambiente atual
 
-Use `.ai/` como fonte das regras, workflows e skills locais deste workspace.
+Use `.claude/commands/` (rotinas de processo) e `.claude/skills/` (capacidades) como fontes locais deste workspace.
 
 ## Contexto do negócio
 
@@ -32,7 +32,7 @@ Não é necessário listar o que foi lido nem confirmar a leitura. Use o context
 
 Antes de executar qualquer tarefa, verifique se existe um workflow ou skill relevante em:
 
-1. `.ai/workflows/`
+1. `.claude/commands/`
 2. `.claude/skills/`
 Se encontrar um workflow ou skill relevante, siga as instruções dele. Se não encontrar, execute a tarefa normalmente.
 
@@ -42,9 +42,9 @@ Ao concluir uma tarefa que não tinha skill mas parece repetível, pergunte:
 
 Não pergunte para tarefas pontuais ou perguntas simples. Só quando o padrão de repetição for claro.
 
-## Workflows disponiveis
+## Commands disponiveis
 
-Os workflows agnósticos ficam em `.ai/workflows/`:
+Os slash commands de processo ficam em `.claude/commands/`:
 
 - `iniciar.md` — inicia a sessão lendo contexto e pendências
 - `setup.md` — configura o sistema para o negócio do usuário
