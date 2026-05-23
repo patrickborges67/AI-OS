@@ -4,8 +4,52 @@ Fonte: materiais em `marketing/referencias/pedro sobral/`:
 - `anuncios_o_segredo_dos_anuncios_online.pdf`
 - `cardapio_de_segmentacoes.pdf`
 - `como_fazer_testes.pdf`
+- `ngt_a1_material_extra_objetivos_de_campanha_e_segmentacoes.pdf`
+- `ngt_a2_como_usar_as_novas_regras_para_vender_todos_os_dias_no_meta_ads.pdf`
 
 Use este arquivo como referencia operacional para criacao, diagnostico, auditoria e otimizacao de campanhas. Ele nao substitui benchmarks, Quality Gates ou dados da conta; ele orienta o raciocinio de criativos, segmentacao e rotina de testes.
+
+---
+
+## Objetivos de campanha
+
+O objetivo escolhido determina para quem o algoritmo entrega o anuncio. Escolher errado desperdiça verba mesmo com criativo bom.
+
+### Meta Ads — 6 objetivos
+
+| Objetivo | Quando usar |
+|---|---|
+| Reconhecimento | Alcance maximo sem exigir acao. Para lancamentos, avisos, branding. |
+| Trafego | Enviar pessoas para site que nao e seu (ex: materia de portal, link externo). Para site proprio com objetivo de venda, use Vendas. |
+| Engajamento | Unico que acumula funcoes: aumenta likes/comentarios/seguidores E recebe mensagens no WhatsApp, Direct ou Messenger. Usar para CTWA (campanha que abre WhatsApp). |
+| Cadastros | Lead generation — otimiza para pessoas com maior probabilidade de se cadastrar no site. |
+| Vendas | Otimiza para pessoas com maior probabilidade de comprar. Usar quando o site e proprio e o evento de conversao esta configurado. |
+| Promocao do app | Divulgacao de aplicativo para instalacao. |
+
+### Google Ads — objetivos e tipos de campanha
+
+Objetivos: Vendas, Leads, Trafego do site, Reconhecimento e consideracao (YouTube), Visitas a lojas locais, Promocao do app.
+
+Tipos de campanha (onde o anuncio aparece):
+- **Pesquisa** — resultado de busca do Google.
+- **Performance Max** — YouTube + sites parceiros + rede de pesquisa.
+- **Display** — sites parceiros do Google.
+- **Shopping** — produtos de e-commerce.
+- **Video** — YouTube.
+- **Discovery** — YouTube + Gmail + Discover.
+
+### Quatro campanhas de ouro
+
+Usar como mapa estrategico para escolher canal e funcao da campanha:
+
+| Campanha | Canal | Funcao |
+|---|---|---|
+| Seguidores qualificados | Meta Ads | Construir audiencia, familiaridade e prova social antes da venda direta. |
+| Vendas 1:1 | Meta Ads | Gerar conversas qualificadas no WhatsApp, Direct ou Messenger. |
+| Dominacao Top 1 no Google | Google Ads | Aparecer para termos de alta intencao e capturar demanda existente. |
+| Vendas no Google | Google Ads | Converter quem ja esta buscando solucao, produto ou fornecedor. |
+
+Em estrategias iniciais, nao tratar "seguidores" como vaidade por padrao. A campanha so faz sentido quando o perfil esta preparado para converter visita em confianca, conversa ou proxima acao.
 
 ---
 
@@ -43,6 +87,36 @@ Manter busca recorrente de referencias. Ao criar campanhas, procurar ideias em:
 - Landingfolio e outras referencias de paginas e ofertas.
 
 Nao limitar a pesquisa ao proprio nicho. Referencias de outros mercados podem gerar angulos melhores do que copiar concorrentes diretos.
+
+### Perfil antes de trafego
+
+Antes de mandar trafego para Instagram, verificar se o perfil esta pronto para receber visita. Um perfil fraco reduz a conversao mesmo quando o anuncio atrai a pessoa certa.
+
+Checklist minimo:
+- Foto de perfil clara, preferencialmente com rosto quando a venda depende de autoridade pessoal.
+- Usuario simples de pesquisar, escrever e memorizar.
+- Nome/titulo buscavel, conectando marca, categoria ou produto.
+- Bio com quem e, o que oferece, transformacao entregue e proxima acao.
+- Link com acao objetiva, sem dispersar a decisao.
+- Destaques organizados: quem somos, provas/depoimentos e servicos/produtos.
+- Nove primeiros posts comunicando posicionamento, autoridade, dor, prova e oferta.
+
+Se o perfil estiver desorganizado, priorizar ajuste do perfil e posts fixados antes de escalar campanhas de crescimento de audiencia.
+
+### Metodo RETINA para conteudo
+
+Usar RETINA para estruturar conteudos organicos, posts impulsionados e campanhas de seguidores qualificados:
+
+| Letra | Tipo | Funcao |
+|---|---|---|
+| R | Relacionamento | Historia, bastidor, valores, experiencia e conexao humana. |
+| E | Engajamento | Formatos com potencial de alcance, comentarios, compartilhamento e relevancia. |
+| T | Transformacao | Dicas, tutoriais, explicacoes e conteudos que levam do ponto A ao ponto B. |
+| I | Interacao 1:1 | Perguntas, enquetes, caixas de resposta, comentarios e conversas diretas. |
+| N | Niveis de consciencia | Sintomas do problema, provas, demonstracoes, bastidores, depoimentos e produto em uso. |
+| A | Autoridade | Resultados, estudos de caso, opinioes tecnicas, conhecimento e posicionamento. |
+
+Ao usar IA para gerar conteudo, sempre informar persona, oferta, dor, nivel de consciencia, canal e objetivo. Pedido generico gera conteudo generico.
 
 ### Respeito ao formato
 
@@ -197,6 +271,78 @@ Considerar, conforme plataforma e objetivo:
 
 ---
 
+## Criacao de publicos
+
+### Meta Ads — tipos de publico personalizado
+
+**Site**
+- Requer pixel instalado.
+- Janela maxima: 180 dias.
+- Pode segmentar por URL especifica (campo "contém" + caminho da pagina).
+
+**Lista de clientes**
+- CSV com email e/ou telefone.
+- Selecionar "Nao inclui valor do cliente" se nao tiver coluna de LTV.
+
+**Conta do Instagram**
+- Eventos mais usados: "todos que se engajaram" e "seguiram a conta profissional".
+- Recomendado criar publicos para varios periodos de retencao: 7, 14, 30, 60, 90, 180, 365 dias.
+
+**Video**
+- Criar por % assistido: 25%, 50%, 75%, 95%.
+- Selecionar videos especificos do Instagram ou Facebook.
+
+**Pagina do Facebook**
+- Usar sempre "Todos que engajaram com a pagina".
+- Criar uma versao para cada janela: 1, 3, 7, 14, 30, 60, 90, 180, 365 dias.
+
+**Publico semelhante (Lookalike)**
+- Criado a partir de qualquer publico personalizado existente.
+- Tamanho recomendado para iniciantes: 1% (equivale a ~1 milhao de pessoas no Brasil).
+- Quanto maior o percentual, maior o alcance e menor a qualificacao.
+
+**Publico salvo**
+- Combina um publico semelhante ou personalizado com filtros de idade, genero, localizacao e interesses.
+- Nao precisa criar um publico salvo para cada semelhante — usar como teste pontual quando fizer sentido estrategico.
+
+### Campanha Meta Ads para Vendas 1:1
+
+Quando o objetivo for gerar conversas no WhatsApp, Direct ou Messenger:
+
+- Usar objetivo **Engajamento** com conversao para aplicativo de mensagens.
+- Preferir configuracao manual quando for necessario controlar publico, posicionamentos, criativos e mensagem inicial.
+- Selecionar apenas uma fonte de mensagens por conjunto quando a leitura precisa ser clara; para WhatsApp, conectar o numero da empresa corretamente.
+- Nomear campanha, conjunto e anuncio de forma legivel: objetivo/orcamento, publico e criativo.
+- Configurar o texto inicial da conversa. A primeira mensagem deve reduzir friccao e orientar a qualificacao, nao apenas dizer "ola".
+- Avaliar qualidade da conversa, nao apenas quantidade de mensagens.
+
+Em publico local ou com ticket maior, testar posicionamentos Advantage+ como padrao, mas considerar limitar para Instagram e WhatsApp quando fizer sentido filtrar contexto e poder aquisitivo. Registrar essa escolha como hipotese, porque posicionamento manual pode reduzir alcance e aprendizado.
+
+Na criacao do anuncio, revisar sugestoes automaticas e aprimoramentos Advantage+. Usar apenas o que preservar promessa, visual, copy e estrategia; nao aceitar variacoes automaticas que mudem o angulo da oferta ou prejudiquem a leitura do teste.
+
+### Google Ads — tipos de publico
+
+**Visitantes do site**
+- Janela maxima: 540 dias (vs 180 no Meta).
+- Pode filtrar por URL especifica via "Refinar acao".
+
+**Usuarios do YouTube**
+- Acoes disponiveis: visualizou qualquer video, visualizou alguns videos especificos, acessou pagina do canal.
+- Criar para janelas de 1, 7, 15, 30 dias.
+
+**Lista de clientes**
+- Mesma logica do Meta: CSV com email/telefone.
+- Requer verba minima na conta.
+
+**Segmentos personalizados (intenção)**
+- Por apps concorrentes: "Pessoas que usam aplicativos semelhantes a X".
+- Por sites concorrentes: "Pessoas que navegam por sites semelhantes a X" — colar URL do concorrente.
+- Por termos pesquisados no Google: "Pessoas que pesquisaram qualquer um destes termos" — funciona apenas em campanhas de pesquisa e YouTube.
+- Por interesses/intencao de compra: digitado em texto livre.
+- Para escolher o app certo, pensar no padrao de consumo do publico (ex: delivery → iFood).
+
+---
+
 ## Testes
 
 ### Mentalidade
@@ -243,10 +389,12 @@ Antes de subir campanha:
 - ICP definido.
 - Nivel de consciencia mapeado.
 - Tipo de anuncio escolhido: camuflado ou explicito.
+- Perfil de Instagram preparado quando o trafego tambem puder gerar visita ao perfil.
 - Pelo menos 6 anuncios planejados quando a verba permitir.
 - Ganchos variados, nao apenas pequenas mudancas de texto.
 - Corpo com oferta, publico, contexto e mecanismo claros.
 - CTA especifico.
+- Mensagem inicial configurada em campanhas de WhatsApp, Direct ou Messenger.
 - Publicos priorizados por temperatura e objetivo.
 - Hipoteses de teste documentadas.
 - UTMs ou nomeacao suficientes para leitura posterior.

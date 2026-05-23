@@ -1,0 +1,1778 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Máquina de Aquisição | Planejamento de Tráfego Pago</title>
+    <meta
+      name="description"
+      content="Proposta visual de uma estrutura completa de aquisição com tráfego pago, CRM, WhatsApp, CAPI, automação e otimização contínua."
+    />
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@500;600;700;800&display=swap");
+
+      :root {
+        --black: #030807;
+        --ink: #071311;
+        --graphite: #0c1517;
+        --panel: rgba(9, 23, 23, 0.72);
+        --panel-strong: rgba(6, 16, 17, 0.94);
+        --line: rgba(99, 255, 232, 0.16);
+        --line-strong: rgba(99, 255, 232, 0.34);
+        --text: #f2fffc;
+        --muted: rgba(230, 255, 250, 0.66);
+        --dim: rgba(230, 255, 250, 0.42);
+        --cyan: #64fff0;
+        --blue: #2b8cff;
+        --green: #39ff88;
+        --purple: #a86bff;
+        --saffron: #ffd84d;
+        --danger: #ff5f79;
+        --radius: 24px;
+        --shadow: 0 30px 120px rgba(0, 0, 0, 0.46);
+        --glow: 0 0 36px rgba(100, 255, 240, 0.2);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        margin: 0;
+        min-width: 320px;
+        overflow-x: hidden;
+        background:
+          radial-gradient(circle at 18% 4%, rgba(43, 140, 255, 0.2), transparent 34rem),
+          radial-gradient(circle at 86% 9%, rgba(168, 107, 255, 0.17), transparent 34rem),
+          radial-gradient(circle at 54% 42%, rgba(57, 255, 136, 0.08), transparent 42rem),
+          linear-gradient(180deg, #030807 0%, #071311 46%, #020605 100%);
+        color: var(--text);
+        font-family: Outfit, sans-serif;
+      }
+
+      body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        z-index: 0;
+        pointer-events: none;
+        background-image:
+          linear-gradient(rgba(100, 255, 240, 0.052) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(100, 255, 240, 0.052) 1px, transparent 1px);
+        background-size: 58px 58px;
+        mask-image: linear-gradient(to bottom, black 0%, rgba(0, 0, 0, 0.78) 42%, transparent 94%);
+      }
+
+      body::after {
+        content: "";
+        position: fixed;
+        inset: 0;
+        z-index: 0;
+        pointer-events: none;
+        opacity: 0.18;
+        mix-blend-mode: screen;
+        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 260 260' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='260' height='260' filter='url(%23n)' opacity='.42'/%3E%3C/svg%3E");
+      }
+
+      a {
+        color: inherit;
+      }
+
+      button,
+      a {
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      a:focus-visible,
+      button:focus-visible {
+        outline: 2px solid var(--cyan);
+        outline-offset: 4px;
+      }
+
+      .page {
+        position: relative;
+        z-index: 1;
+        overflow: hidden;
+      }
+
+      .container {
+        width: min(1220px, calc(100% - 42px));
+        margin: 0 auto;
+      }
+
+      .topbar {
+        position: sticky;
+        top: 0;
+        z-index: 40;
+        border-bottom: 1px solid var(--line);
+        background: rgba(3, 8, 7, 0.76);
+        backdrop-filter: blur(18px);
+      }
+
+      .topbar-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        min-height: 78px;
+        gap: 24px;
+      }
+
+      .logo img {
+        display: block;
+        width: 172px;
+        height: auto;
+      }
+
+      .nav {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .nav a {
+        border: 1px solid transparent;
+        border-radius: 999px;
+        padding: 9px 12px;
+        color: var(--muted);
+        font-size: 13px;
+        font-weight: 800;
+        text-decoration: none;
+      }
+
+      .nav a:hover {
+        border-color: var(--line);
+        background: rgba(100, 255, 240, 0.07);
+        color: var(--text);
+      }
+
+      .nav-cta {
+        border-color: rgba(57, 255, 136, 0.32) !important;
+        color: var(--green) !important;
+      }
+
+      .hero {
+        position: relative;
+        min-height: calc(100vh - 78px);
+        display: grid;
+        align-items: center;
+        padding: 72px 0 54px;
+      }
+
+      .hero::before {
+        content: "";
+        position: absolute;
+        inset: 9% -12% auto auto;
+        width: min(800px, 64vw);
+        height: min(800px, 64vw);
+        border-radius: 50%;
+        background: conic-gradient(from 130deg, rgba(100, 255, 240, 0), rgba(43, 140, 255, 0.22), rgba(168, 107, 255, 0.18), rgba(57, 255, 136, 0.13), rgba(100, 255, 240, 0));
+        filter: blur(18px);
+        opacity: 0.9;
+      }
+
+      .hero-grid {
+        position: relative;
+        display: grid;
+        grid-template-columns: minmax(0, 1.02fr) minmax(380px, 0.86fr);
+        gap: 46px;
+        align-items: center;
+      }
+
+      .eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        width: fit-content;
+        border: 1px solid var(--line-strong);
+        border-radius: 999px;
+        padding: 9px 13px;
+        background: rgba(100, 255, 240, 0.07);
+        color: var(--cyan);
+        font-size: 11px;
+        font-weight: 900;
+        letter-spacing: 0.22em;
+        text-transform: uppercase;
+        box-shadow: var(--glow);
+      }
+
+      .eyebrow::before {
+        content: "";
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--green);
+        box-shadow: 0 0 18px var(--green);
+      }
+
+      h1,
+      h2,
+      h3 {
+        margin: 0;
+        font-family: "Space Grotesk", sans-serif;
+      }
+
+      .hero-title {
+        max-width: 960px;
+        margin-top: 28px;
+        font-size: clamp(3.5rem, 7.8vw, 8.8rem);
+        font-weight: 800;
+        line-height: 0.84;
+        letter-spacing: -0.075em;
+      }
+
+      .hero-title span {
+        color: transparent;
+        background: linear-gradient(92deg, var(--cyan), var(--green) 44%, var(--saffron));
+        -webkit-background-clip: text;
+        background-clip: text;
+      }
+
+      .hero-copy {
+        max-width: 780px;
+        margin: 28px 0 0;
+        color: var(--muted);
+        font-size: clamp(1.05rem, 1.55vw, 1.28rem);
+        line-height: 1.68;
+      }
+
+      .hero-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-top: 34px;
+      }
+
+      .button {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 52px;
+        overflow: hidden;
+        border: 1px solid rgba(100, 255, 240, 0.38);
+        border-radius: 999px;
+        padding: 0 20px;
+        background: linear-gradient(135deg, var(--cyan), var(--green));
+        color: #03100d;
+        font-weight: 900;
+        text-decoration: none;
+        box-shadow: 0 18px 46px rgba(57, 255, 136, 0.16);
+        transform: translateZ(0);
+      }
+
+      .button::after {
+        content: "";
+        position: absolute;
+        inset: 0 auto 0 -44%;
+        width: 38%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.58), transparent);
+        transform: skewX(-22deg);
+        transition: transform 500ms ease;
+      }
+
+      .button:hover::after {
+        transform: translateX(390%) skewX(-22deg);
+      }
+
+      .button.secondary {
+        background: rgba(100, 255, 240, 0.06);
+        color: var(--text);
+        box-shadow: none;
+      }
+
+      .machine {
+        position: relative;
+        min-height: 650px;
+      }
+
+      .orbital {
+        position: absolute;
+        inset: 0;
+        border: 1px solid rgba(100, 255, 240, 0.16);
+        border-radius: 42px;
+        background:
+          radial-gradient(circle at 42% 28%, rgba(100, 255, 240, 0.14), transparent 20rem),
+          rgba(5, 15, 16, 0.54);
+        box-shadow: var(--shadow);
+        backdrop-filter: blur(18px);
+      }
+
+      .machine-line {
+        position: absolute;
+        inset: 42px 22px auto;
+        height: 320px;
+        pointer-events: none;
+      }
+
+      .machine-line path {
+        fill: none;
+        stroke: url(#lineGradient);
+        stroke-width: 2;
+        stroke-linecap: round;
+        stroke-dasharray: 1000;
+        stroke-dashoffset: 1000;
+        filter: drop-shadow(0 0 8px rgba(100, 255, 240, 0.55));
+      }
+
+      .float-card {
+        position: absolute;
+        z-index: 3;
+        width: min(280px, 44vw);
+        border: 1px solid var(--line);
+        border-radius: 22px;
+        padding: 18px;
+        background: rgba(8, 22, 23, 0.78);
+        box-shadow: 0 24px 70px rgba(0, 0, 0, 0.32);
+        backdrop-filter: blur(16px);
+      }
+
+      .float-card h3 {
+        font-size: 18px;
+        letter-spacing: -0.02em;
+      }
+
+      .float-card p {
+        margin: 8px 0 0;
+        color: var(--muted);
+        font-size: 13px;
+        line-height: 1.5;
+      }
+
+      .float-card small {
+        color: var(--cyan);
+        font-weight: 900;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+      }
+
+      .card-a {
+        top: 38px;
+        left: 28px;
+      }
+
+      .card-b {
+        top: 96px;
+        right: 8px;
+      }
+
+      .card-c {
+        right: 22px;
+        bottom: 148px;
+      }
+
+      .card-d {
+        left: 38px;
+        bottom: 86px;
+      }
+
+      .dashboard {
+        position: absolute;
+        z-index: 2;
+        left: 50%;
+        top: 53%;
+        width: min(330px, 70vw);
+        transform: translate(-50%, -50%);
+        border: 1px solid rgba(100, 255, 240, 0.28);
+        border-radius: 28px;
+        background:
+          linear-gradient(145deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02)),
+          rgba(6, 15, 16, 0.92);
+        box-shadow: 0 34px 110px rgba(0, 0, 0, 0.52), 0 0 60px rgba(100, 255, 240, 0.12);
+        overflow: hidden;
+      }
+
+      .dash-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid var(--line);
+        padding: 16px 18px;
+      }
+
+      .dash-dots {
+        display: flex;
+        gap: 7px;
+      }
+
+      .dash-dots span {
+        width: 9px;
+        height: 9px;
+        border-radius: 50%;
+        background: var(--cyan);
+      }
+
+      .dash-dots span:nth-child(2) {
+        background: var(--purple);
+      }
+
+      .dash-dots span:nth-child(3) {
+        background: var(--green);
+      }
+
+      .dash-body {
+        padding: 18px;
+      }
+
+      .kpi-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+      }
+
+      .kpi {
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        padding: 13px;
+        background: rgba(255, 255, 255, 0.035);
+      }
+
+      .kpi span {
+        display: block;
+        color: var(--dim);
+        font-size: 11px;
+        font-weight: 800;
+        text-transform: uppercase;
+      }
+
+      .kpi strong {
+        display: block;
+        margin-top: 6px;
+        color: var(--text);
+        font-family: "Space Grotesk", sans-serif;
+        font-size: 26px;
+      }
+
+      .chart {
+        display: grid;
+        grid-template-columns: repeat(9, 1fr);
+        align-items: end;
+        gap: 7px;
+        height: 130px;
+        margin-top: 18px;
+        border: 1px solid var(--line);
+        border-radius: 18px;
+        padding: 14px;
+        background: rgba(0, 0, 0, 0.16);
+      }
+
+      .bar {
+        display: block;
+        height: var(--h);
+        min-height: 10px;
+        border-radius: 999px 999px 4px 4px;
+        background: linear-gradient(to top, var(--blue), var(--cyan) 62%, var(--green));
+        transform-origin: bottom;
+      }
+
+      section {
+        position: relative;
+        padding: 92px 0;
+      }
+
+      .section-head {
+        display: grid;
+        grid-template-columns: minmax(0, 0.92fr) minmax(280px, 0.42fr);
+        gap: 42px;
+        align-items: end;
+        margin-bottom: 38px;
+      }
+
+      .label {
+        display: inline-flex;
+        width: fit-content;
+        border: 1px solid var(--line-strong);
+        border-radius: 999px;
+        padding: 8px 12px;
+        background: rgba(100, 255, 240, 0.06);
+        color: var(--cyan);
+        font-size: 11px;
+        font-weight: 900;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+      }
+
+      h2 {
+        max-width: 880px;
+        margin-top: 18px;
+        font-size: clamp(2.35rem, 5vw, 5.8rem);
+        line-height: 0.94;
+        letter-spacing: -0.065em;
+      }
+
+      .section-copy {
+        margin: 0;
+        color: var(--muted);
+        line-height: 1.74;
+      }
+
+      .grid-3 {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 16px;
+      }
+
+      .grid-2 {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 18px;
+      }
+
+      .panel,
+      .metric-card,
+      .event-row,
+      .phase,
+      .calendar-day,
+      .roadmap-item,
+      .creative-table,
+      .niche {
+        border: 1px solid var(--line);
+        background:
+          linear-gradient(145deg, rgba(255, 255, 255, 0.058), rgba(255, 255, 255, 0.018)),
+          var(--panel);
+        box-shadow: 0 22px 80px rgba(0, 0, 0, 0.24);
+        backdrop-filter: blur(16px);
+      }
+
+      .panel,
+      .metric-card {
+        border-radius: var(--radius);
+        padding: 24px;
+      }
+
+      .metric-card h3,
+      .panel h3,
+      .phase h3,
+      .niche h3 {
+        font-size: 24px;
+        line-height: 1.15;
+        letter-spacing: -0.035em;
+      }
+
+      .metric-card p,
+      .panel p,
+      .phase p,
+      .niche p {
+        margin: 12px 0 0;
+        color: var(--muted);
+        line-height: 1.64;
+      }
+
+      .metric-number {
+        margin-top: 24px;
+        color: var(--cyan);
+        font-family: "Space Grotesk", sans-serif;
+        font-size: clamp(2.4rem, 5vw, 4.2rem);
+        font-weight: 800;
+        letter-spacing: -0.06em;
+        text-shadow: 0 0 24px rgba(100, 255, 240, 0.22);
+      }
+
+      .machine-map {
+        min-height: 470px;
+        position: relative;
+        overflow: hidden;
+        border-radius: 34px;
+        border: 1px solid var(--line-strong);
+        background:
+          radial-gradient(circle at 52% 44%, rgba(100, 255, 240, 0.12), transparent 18rem),
+          rgba(6, 16, 17, 0.76);
+        box-shadow: var(--shadow);
+      }
+
+      .map-svg {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+      }
+
+      .map-svg path {
+        fill: none;
+        stroke: rgba(100, 255, 240, 0.7);
+        stroke-width: 2;
+        stroke-linecap: round;
+        stroke-dasharray: 1200;
+        stroke-dashoffset: 1200;
+        filter: drop-shadow(0 0 12px rgba(100, 255, 240, 0.5));
+      }
+
+      .node {
+        position: absolute;
+        width: min(240px, 42vw);
+        border: 1px solid var(--line);
+        border-radius: 20px;
+        padding: 18px;
+        background: rgba(6, 18, 19, 0.9);
+      }
+
+      .node small {
+        display: block;
+        color: var(--cyan);
+        font-size: 11px;
+        font-weight: 900;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+      }
+
+      .node strong {
+        display: block;
+        margin-top: 12px;
+        font-family: "Space Grotesk", sans-serif;
+        font-size: 22px;
+        letter-spacing: -0.03em;
+      }
+
+      .node span {
+        display: block;
+        margin-top: 8px;
+        color: var(--muted);
+        font-size: 13px;
+        line-height: 1.46;
+      }
+
+      .node-1 {
+        top: 34px;
+        left: 34px;
+      }
+
+      .node-2 {
+        top: 50px;
+        right: 52px;
+      }
+
+      .node-3 {
+        left: 50%;
+        top: 44%;
+        transform: translate(-50%, -50%);
+      }
+
+      .node-4 {
+        bottom: 38px;
+        left: 72px;
+      }
+
+      .node-5 {
+        right: 44px;
+        bottom: 52px;
+      }
+
+      .funnel-wrap {
+        display: grid;
+        grid-template-columns: minmax(0, 0.9fr) minmax(320px, 0.62fr);
+        gap: 20px;
+        align-items: stretch;
+      }
+
+      .funnel {
+        display: grid;
+        gap: 12px;
+      }
+
+      .funnel-stage {
+        --w: 100%;
+        width: var(--w);
+        min-height: 82px;
+        border: 1px solid var(--line);
+        border-radius: 20px;
+        padding: 16px 18px;
+        background:
+          linear-gradient(90deg, rgba(43, 140, 255, 0.15), rgba(100, 255, 240, 0.08)),
+          rgba(7, 19, 17, 0.82);
+        box-shadow: 0 18px 60px rgba(0, 0, 0, 0.2);
+        transform-origin: left center;
+      }
+
+      .funnel-stage:nth-child(2) {
+        --w: 90%;
+      }
+
+      .funnel-stage:nth-child(3) {
+        --w: 78%;
+      }
+
+      .funnel-stage:nth-child(4) {
+        --w: 62%;
+      }
+
+      .funnel-stage:nth-child(5) {
+        --w: 46%;
+      }
+
+      .funnel-stage strong {
+        display: block;
+        font-family: "Space Grotesk", sans-serif;
+        font-size: 22px;
+      }
+
+      .funnel-stage span {
+        display: block;
+        margin-top: 6px;
+        color: var(--muted);
+      }
+
+      .event-list {
+        display: grid;
+        gap: 12px;
+      }
+
+      .event-row {
+        display: grid;
+        grid-template-columns: 180px 1fr 240px;
+        overflow: hidden;
+        border-radius: 20px;
+      }
+
+      .event-cell {
+        padding: 18px;
+        border-left: 1px solid var(--line);
+      }
+
+      .event-cell:first-child {
+        border-left: 0;
+      }
+
+      .event-name {
+        color: var(--cyan);
+        font-family: "Space Grotesk", sans-serif;
+        font-size: 22px;
+        font-weight: 800;
+        letter-spacing: -0.03em;
+      }
+
+      .event-cell small {
+        display: block;
+        margin-bottom: 7px;
+        color: var(--dim);
+        font-size: 11px;
+        font-weight: 900;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+      }
+
+      .phase-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 14px;
+      }
+
+      .phase {
+        border-radius: 22px;
+        padding: 22px;
+      }
+
+      .phase-index {
+        display: block;
+        margin-bottom: 30px;
+        color: var(--cyan);
+        font-family: "Space Grotesk", sans-serif;
+        font-size: 48px;
+        font-weight: 800;
+        letter-spacing: -0.065em;
+      }
+
+      .list {
+        display: grid;
+        gap: 10px;
+        margin: 18px 0 0;
+        padding: 0;
+        list-style: none;
+      }
+
+      .list li {
+        position: relative;
+        padding-left: 20px;
+        color: var(--muted);
+        line-height: 1.55;
+      }
+
+      .list li::before {
+        content: "";
+        position: absolute;
+        top: 0.7em;
+        left: 0;
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: var(--green);
+        box-shadow: 0 0 14px rgba(57, 255, 136, 0.46);
+      }
+
+      .niche-grid {
+        display: grid;
+        grid-template-columns: 1.06fr 0.94fr;
+        gap: 18px;
+      }
+
+      .niche-list {
+        display: grid;
+        gap: 14px;
+      }
+
+      .niche {
+        display: grid;
+        grid-template-columns: 58px 1fr;
+        gap: 16px;
+        align-items: start;
+        border-radius: 22px;
+        padding: 18px;
+      }
+
+      .niche-mark {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 58px;
+        height: 58px;
+        border-radius: 18px;
+        background: linear-gradient(135deg, var(--cyan), var(--green));
+        color: var(--black);
+        font-family: "Space Grotesk", sans-serif;
+        font-size: 26px;
+        font-weight: 800;
+      }
+
+      .creative-table {
+        overflow: hidden;
+        border-radius: 24px;
+      }
+
+      .creative-row {
+        display: grid;
+        grid-template-columns: 170px 1fr 1.15fr;
+        border-top: 1px solid var(--line);
+      }
+
+      .creative-row:first-child {
+        border-top: 0;
+      }
+
+      .creative-row > div {
+        padding: 18px;
+      }
+
+      .creative-row > div + div {
+        border-left: 1px solid var(--line);
+      }
+
+      .pill {
+        display: inline-flex;
+        width: fit-content;
+        border: 1px solid var(--line-strong);
+        border-radius: 999px;
+        padding: 7px 10px;
+        background: rgba(100, 255, 240, 0.07);
+        color: var(--cyan);
+        font-size: 12px;
+        font-weight: 900;
+      }
+
+      .calendar {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        gap: 10px;
+      }
+
+      .calendar-day {
+        min-height: 142px;
+        border-radius: 20px;
+        padding: 14px;
+      }
+
+      .calendar-day strong {
+        display: block;
+        margin-bottom: 12px;
+        color: var(--cyan);
+        font-size: 11px;
+        font-weight: 900;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+      }
+
+      .calendar-day span {
+        display: block;
+        color: var(--muted);
+        font-size: 13px;
+        line-height: 1.44;
+      }
+
+      .metric-cloud {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+
+      .metric-pill {
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        padding: 10px 13px;
+        background: rgba(100, 255, 240, 0.055);
+        color: var(--muted);
+        font-weight: 800;
+      }
+
+      .roadmap {
+        display: grid;
+        gap: 12px;
+      }
+
+      .roadmap-item {
+        display: grid;
+        grid-template-columns: 54px 1fr;
+        gap: 18px;
+        align-items: start;
+        border-radius: 22px;
+        padding: 18px;
+      }
+
+      .roadmap-index {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 48px;
+        height: 48px;
+        border-radius: 17px;
+        background: linear-gradient(135deg, var(--cyan), var(--green));
+        color: var(--black);
+        font-family: "Space Grotesk", sans-serif;
+        font-weight: 900;
+      }
+
+      .footer {
+        border-top: 1px solid var(--line);
+        padding: 34px 0 58px;
+        color: var(--dim);
+        font-size: 14px;
+      }
+
+      .reveal {
+        opacity: 1;
+        transform: none;
+      }
+
+      .decor-line {
+        position: absolute;
+        pointer-events: none;
+        opacity: 0.52;
+      }
+
+      .decor-line.one {
+        left: -10vw;
+        top: 18%;
+        width: 46vw;
+        height: 1px;
+        background: linear-gradient(90deg, transparent, var(--cyan), transparent);
+        transform: rotate(-18deg);
+      }
+
+      .decor-line.two {
+        right: -14vw;
+        bottom: 22%;
+        width: 54vw;
+        height: 1px;
+        background: linear-gradient(90deg, transparent, var(--purple), transparent);
+        transform: rotate(14deg);
+      }
+
+      @media (max-width: 1080px) {
+        .nav {
+          display: none;
+        }
+
+        .hero-grid,
+        .section-head,
+        .grid-2,
+        .niche-grid,
+        .funnel-wrap {
+          grid-template-columns: 1fr;
+        }
+
+        .grid-3,
+        .phase-grid,
+        .calendar {
+          grid-template-columns: repeat(2, 1fr);
+        }
+
+        .journey-mobile {
+          display: grid;
+        }
+
+        .event-row,
+        .creative-row {
+          grid-template-columns: 1fr;
+        }
+
+        .event-cell,
+        .creative-row > div + div {
+          border-left: 0;
+          border-top: 1px solid var(--line);
+        }
+
+        .machine {
+          min-height: 560px;
+        }
+      }
+
+      @media (max-width: 720px) {
+        .container {
+          width: min(100% - 28px, 1220px);
+        }
+
+        .logo img {
+          width: 146px;
+        }
+
+        .hero {
+          min-height: auto;
+          padding-top: 46px;
+        }
+
+        .hero-title {
+          font-size: 3.1rem;
+        }
+
+        .hero-copy {
+          font-size: 1rem;
+        }
+
+        section {
+          padding: 62px 0;
+        }
+
+        .grid-3,
+        .phase-grid,
+        .calendar {
+          grid-template-columns: 1fr;
+        }
+
+        .machine {
+          min-height: auto;
+        }
+
+        .orbital,
+        .machine-line {
+          display: none;
+        }
+
+        .float-card,
+        .dashboard {
+          position: relative;
+          inset: auto;
+          left: auto;
+          right: auto;
+          top: auto;
+          bottom: auto;
+          width: 100%;
+          margin-bottom: 12px;
+          transform: none;
+        }
+
+        .machine {
+          display: grid;
+          gap: 12px;
+        }
+
+        .event-chip {
+          grid-column: 2;
+          width: fit-content;
+        }
+
+        .pipeline-step {
+          grid-template-columns: 38px 1fr;
+        }
+
+        .node {
+          position: relative;
+          inset: auto;
+          width: 100%;
+          margin-bottom: 12px;
+          transform: none;
+        }
+
+        .machine-map {
+          min-height: auto;
+          padding: 14px;
+        }
+
+        .map-svg {
+          display: none;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+          scroll-behavior: auto !important;
+          animation-duration: 0.001ms !important;
+          animation-iteration-count: 1 !important;
+          transition-duration: 0.001ms !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page">
+      <header class="topbar">
+        <div class="container topbar-inner">
+          <a class="logo" href="#top" aria-label="EssentialWeb">
+            <img src="../projetos/essential-web/public/header_logo.png" alt="EssentialWeb" />
+          </a>
+          <nav class="nav" aria-label="Navegação">
+            <a href="#machine">Máquina</a>
+            <a href="#funnel">Funil</a>
+            <a href="#events">CAPI</a>
+            <a href="#campaigns">Campanhas</a>
+            <a class="nav-cta" href="#roadmap">Execução</a>
+          </nav>
+        </div>
+      </header>
+
+      <main id="top">
+        <section class="hero">
+          <div class="decor-line one" data-parallax data-speed="-24"></div>
+          <div class="decor-line two" data-parallax data-speed="18"></div>
+
+          <div class="container hero-grid">
+            <div class="hero-copy-block">
+              <div class="eyebrow hero-item">Estrutura completa de tráfego pago</div>
+              <h1 class="hero-title hero-item">Máquina de aquisição <span>com tracking, IA e escala.</span></h1>
+              <p class="hero-copy hero-item">
+                Uma operação comercial que conecta Meta Ads, Google Ads, criativos, landing pages,
+                WhatsApp, CRM, automações, dashboards e CAPI para transformar investimento em dados,
+                oportunidades qualificadas e crescimento controlado.
+              </p>
+              <div class="hero-actions hero-item">
+                <a class="button" href="#roadmap">Ver plano de execução</a>
+                <a class="button secondary" href="#events">Explorar eventos CAPI</a>
+              </div>
+            </div>
+
+            <aside class="machine" aria-label="Máquina visual de aquisição">
+              <div class="orbital"></div>
+              <svg class="machine-line" viewBox="0 0 620 360" aria-hidden="true">
+                <defs>
+                  <linearGradient id="lineGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stop-color="#2b8cff" />
+                    <stop offset="45%" stop-color="#64fff0" />
+                    <stop offset="100%" stop-color="#39ff88" />
+                  </linearGradient>
+                </defs>
+                <path d="M58 65 C160 18 222 124 310 102 C430 72 464 38 560 82" />
+                <path d="M72 242 C162 306 218 178 315 206 C430 242 468 286 552 224" />
+                <path d="M148 82 C236 168 232 228 135 282" />
+                <path d="M485 86 C402 154 412 218 522 282" />
+              </svg>
+
+              <div class="float-card card-a floaty">
+                <small>Meta / Google Ads</small>
+                <h3>Campanhas por hipótese</h3>
+                <p>Ganchos, públicos e UTMs separados para leitura limpa.</p>
+              </div>
+              <div class="float-card card-b floaty">
+                <small>Criativos</small>
+                <h3>Volume com critério</h3>
+                <p>Dor, demonstração, nicho, oferta e prova em rodadas controladas.</p>
+              </div>
+              <div class="dashboard floaty">
+                <div class="dash-head">
+                  <div class="dash-dots"><span></span><span></span><span></span></div>
+                  <strong>Acquisition OS</strong>
+                </div>
+                <div class="dash-body">
+                  <div class="kpi-grid">
+                    <div class="kpi"><span>Lead</span><strong class="count" data-target="842">0</strong></div>
+                    <div class="kpi"><span>Contact</span><strong class="count" data-target="517">0</strong></div>
+                    <div class="kpi"><span>Qualificados</span><strong class="count" data-target="189">0</strong></div>
+                    <div class="kpi"><span>Agenda</span><strong class="count" data-target="46">0</strong></div>
+                  </div>
+                  <div class="chart" aria-label="Gráfico visual de crescimento">
+                    <span class="bar" style="--h: 32%"></span>
+                    <span class="bar" style="--h: 46%"></span>
+                    <span class="bar" style="--h: 38%"></span>
+                    <span class="bar" style="--h: 58%"></span>
+                    <span class="bar" style="--h: 68%"></span>
+                    <span class="bar" style="--h: 62%"></span>
+                    <span class="bar" style="--h: 78%"></span>
+                    <span class="bar" style="--h: 88%"></span>
+                    <span class="bar" style="--h: 100%"></span>
+                  </div>
+                </div>
+              </div>
+              <div class="float-card card-c floaty">
+                <small>WhatsApp / CRM</small>
+                <h3>Qualificação no canal real</h3>
+                <p>IA coleta contexto, registra resumo e aciona humano ou agenda.</p>
+              </div>
+              <div class="float-card card-d floaty">
+                <small>CAPI / Server-side</small>
+                <h3>Eventos profundos</h3>
+                <p>Lead, Contact, CompleteRegistration, Schedule e Purchase.</p>
+              </div>
+            </aside>
+          </div>
+        </section>
+
+        <section id="machine">
+          <div class="container">
+            <div class="section-head reveal">
+              <div>
+                <div class="label">Arquitetura comercial</div>
+                <h2>Tráfego pago não é campanha isolada. É uma esteira de aquisição.</h2>
+              </div>
+              <p class="section-copy">
+                A página apresenta a estrutura como um sistema completo: estratégia, criativos, landing, rastreamento,
+                WhatsApp, CRM, automação, dashboard, otimização e escala de investimento.
+              </p>
+            </div>
+
+            <div class="grid-3">
+              <article class="metric-card reveal">
+                <h3>Estratégia de aquisição</h3>
+                <p>ICP, oferta, níveis de consciência, nichos de teste e hipóteses de criativo antes de aumentar verba.</p>
+                <div class="metric-number count" data-target="01">0</div>
+              </article>
+              <article class="metric-card reveal">
+                <h3>Operação conectada</h3>
+                <p>Landing curta, WhatsApp com IA, CRM com resumo, automações e CAPI alimentando a leitura de qualidade.</p>
+                <div class="metric-number count" data-target="02">0</div>
+              </article>
+              <article class="metric-card reveal">
+                <h3>Otimização contínua</h3>
+                <p>Criativos por rodada, testes de 5 a 7 dias, eventos profundos, dashboards e escala gradual.</p>
+                <div class="metric-number count" data-target="03">0</div>
+              </article>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <div class="container">
+            <div class="machine-map reveal">
+              <svg class="map-svg" viewBox="0 0 1200 470" preserveAspectRatio="none" aria-hidden="true">
+                <path d="M150 110 C320 40 420 200 600 168 C790 136 850 70 1040 118" />
+                <path d="M170 350 C330 420 430 270 590 304 C760 340 850 410 1038 330" />
+                <path d="M238 150 C382 228 396 282 242 358" />
+                <path d="M962 146 C804 236 820 282 964 346" />
+              </svg>
+              <div class="node node-1">
+                <small>Aquisição</small>
+                <strong>Meta Ads / Google Ads</strong>
+                <span>Campanhas por hipótese, UTM e intenção.</span>
+              </div>
+              <div class="node node-2">
+                <small>Conversão</small>
+                <strong>Landing pages</strong>
+                <span>Formulário curto, promessa clara e match posterior.</span>
+              </div>
+              <div class="node node-3">
+                <small>Operação</small>
+                <strong>WhatsApp + IA + CRM</strong>
+                <span>Qualificação, resumo, temperatura e próxima ação.</span>
+              </div>
+              <div class="node node-4">
+                <small>Dados</small>
+                <strong>CAPI e dashboards</strong>
+                <span>Eventos server-side e leitura por qualidade.</span>
+              </div>
+              <div class="node node-5">
+                <small>Escala</small>
+                <strong>Otimização contínua</strong>
+                <span>Vencedores viram variações, verba e remarketing.</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="funnel">
+          <div class="container">
+            <div class="section-head reveal">
+              <div>
+                <div class="label">Funil operacional</div>
+                <h2>O funil deixa de ser uma planilha e passa a ser um sistema vivo.</h2>
+              </div>
+              <p class="section-copy">
+                Cada etapa tem uma função comercial e um sinal de tracking. A leitura não depende só de CPL:
+                ela mostra onde o investimento vira conversa, qualificação, agenda e venda.
+              </p>
+            </div>
+
+            <div class="funnel-wrap">
+              <div class="funnel" aria-label="Funil visual">
+                <div class="funnel-stage"><strong>Lead</strong><span>Formulário enviado em /chatbots.</span></div>
+                <div class="funnel-stage"><strong>Contact</strong><span>Lead identificado no WhatsApp.</span></div>
+                <div class="funnel-stage"><strong>CompleteRegistration</strong><span>IA concluiu qualificação e resumo.</span></div>
+                <div class="funnel-stage"><strong>Schedule</strong><span>Tool de agenda confirmou diagnóstico.</span></div>
+                <div class="funnel-stage"><strong>Purchase</strong><span>Venda fechada e atribuída.</span></div>
+              </div>
+
+              <aside class="panel reveal">
+                <div class="label">Regra de escala</div>
+                <h3 style="margin-top: 20px">Otimizar para Lead no começo. Escalar por qualidade depois.</h3>
+                <p>
+                  CompleteRegistration e Schedule entram primeiro como leitura de qualidade. Só viram otimização quando
+                  houver volume consistente para o algoritmo aprender sem travar entrega.
+                </p>
+              </aside>
+            </div>
+          </div>
+        </section>
+
+        <section id="events">
+          <div class="container">
+            <div class="section-head reveal">
+              <div>
+                <div class="label">Server-side tracking</div>
+                <h2>Eventos CAPI para separar curiosos de oportunidades comerciais.</h2>
+              </div>
+              <p class="section-copy">
+                O n8n orquestra eventos profundos conforme a conversa avança. O CRM mantém contexto operacional,
+                e a Meta recebe sinais melhores sobre qualidade.
+              </p>
+            </div>
+
+            <div class="event-list">
+              <div class="event-row reveal">
+                <div class="event-cell event-name">Lead</div>
+                <div class="event-cell"><small>Disparo</small>Formulário enviado em /chatbots.</div>
+                <div class="event-cell"><small>Uso</small>Evento de volume inicial.</div>
+              </div>
+              <div class="event-row reveal">
+                <div class="event-cell event-name">Contact</div>
+                <div class="event-cell"><small>Disparo</small>Lead chegou ou foi matcheado no WhatsApp.</div>
+                <div class="event-cell"><small>Uso</small>Valida chegada no canal comercial.</div>
+              </div>
+              <div class="event-row reveal">
+                <div class="event-cell event-name">CompleteRegistration</div>
+                <div class="event-cell"><small>Disparo</small>Agente gerou o resumo de qualificação.</div>
+                <div class="event-cell"><small>Uso</small>Mede lead com contexto real.</div>
+              </div>
+              <div class="event-row reveal">
+                <div class="event-cell event-name">Schedule</div>
+                <div class="event-cell"><small>Disparo</small>Tool de agenda criou ou confirmou reunião.</div>
+                <div class="event-cell"><small>Uso</small>Oportunidade comercial forte.</div>
+              </div>
+              <div class="event-row reveal">
+                <div class="event-cell event-name">Purchase</div>
+                <div class="event-cell"><small>Disparo</small>Fechamento comercial.</div>
+                <div class="event-cell"><small>Uso</small>ROAS, escala e qualidade final.</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <div class="container">
+            <div class="phase-grid">
+              <article class="phase reveal">
+                <span class="phase-index">01</span>
+                <h3>Pré-campanha</h3>
+                <ul class="list">
+                  <li>Landing, formulário, WhatsApp e CRM validados.</li>
+                  <li>Eventos testados no Events Manager.</li>
+                  <li>Roteiro de IA e resumo definidos.</li>
+                </ul>
+              </article>
+              <article class="phase reveal">
+                <span class="phase-index">02</span>
+                <h3>Rodada 1</h3>
+                <ul class="list">
+                  <li>6 criativos com hipóteses diferentes.</li>
+                  <li>UTMs por nicho, dor e formato.</li>
+                  <li>5 a 7 dias sem troca impulsiva.</li>
+                </ul>
+              </article>
+              <article class="phase reveal">
+                <span class="phase-index">03</span>
+                <h3>Iteração</h3>
+                <ul class="list">
+                  <li>Variar vencedores, não começar do zero.</li>
+                  <li>Comparar por Contact e CompleteRegistration.</li>
+                  <li>Ativar remarketing com público suficiente.</li>
+                </ul>
+              </article>
+              <article class="phase reveal">
+                <span class="phase-index">04</span>
+                <h3>Escala</h3>
+                <ul class="list">
+                  <li>Concentrar verba nos melhores sinais.</li>
+                  <li>Nichar landing apenas após tração.</li>
+                  <li>Usar Schedule e Purchase para escala.</li>
+                </ul>
+              </article>
+            </div>
+          </div>
+        </section>
+
+        <section id="campaigns">
+          <div class="container">
+            <div class="section-head reveal">
+              <div>
+                <div class="label">Campanhas e criativos</div>
+                <h2>Testar mercado, mensagem e mecanismo sem fragmentar verba.</h2>
+              </div>
+              <p class="section-copy">
+                A primeira leitura combina criativos gerais e nichados. O vencedor não é o clique barato:
+                é o segmento que gera dor clara, agenda e potencial de ticket.
+              </p>
+            </div>
+
+            <div class="niche-grid">
+              <div class="niche-list">
+                <article class="niche reveal">
+                  <div class="niche-mark">C</div>
+                  <div>
+                    <h3>Clínicas e estética</h3>
+                    <p>Recepção sobrecarregada, perguntas repetidas, agenda, reagendamento e no-show.</p>
+                  </div>
+                </article>
+                <article class="niche reveal">
+                  <div class="niche-mark">I</div>
+                  <div>
+                    <h3>Imobiliárias e corretores</h3>
+                    <p>Lead quente esfria rápido se corretor demora ou recebe a conversa sem contexto.</p>
+                  </div>
+                </article>
+                <article class="niche reveal">
+                  <div class="niche-mark">S</div>
+                  <div>
+                    <h3>Serviços locais com orçamento</h3>
+                    <p>Energia solar, assistência, reformas e seguros: orçamento sem follow-up vira lead morto.</p>
+                  </div>
+                </article>
+              </div>
+
+              <article class="panel reveal">
+                <div class="label">Critério de decisão</div>
+                <h3 style="margin-top: 20px">A verba segue o sinal comercial, não a vaidade da plataforma.</h3>
+                <p>
+                  A rodada será avaliada por lead qualificado, conversa clara, reunião marcada, proposta enviada,
+                  capacidade de expansão e menor necessidade de explicar a solução.
+                </p>
+              </article>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <div class="container">
+            <div class="section-head reveal">
+              <div>
+                <div class="label">Primeira bateria</div>
+                <h2>Seis criativos para fazer a máquina começar a aprender.</h2>
+              </div>
+              <p class="section-copy">
+                Cada peça testa um ângulo real: demonstração, dor direta, educação, nicho específico,
+                história de follow-up e oferta de diagnóstico.
+              </p>
+            </div>
+
+            <div class="creative-table reveal">
+              <div class="creative-row">
+                <div><span class="pill">Vídeo curto</span></div>
+                <div><strong>Demo do fluxo com IA</strong></div>
+                <div>Anúncio -> WhatsApp -> qualificação -> CRM -> humano -> follow-up.</div>
+              </div>
+              <div class="creative-row">
+                <div><span class="pill">Estático</span></div>
+                <div><strong>Seu anúncio gera lead. Seu WhatsApp perde a venda.</strong></div>
+                <div>Conecta investimento em mídia com perda no atendimento.</div>
+              </div>
+              <div class="creative-row">
+                <div><span class="pill">Carrossel</span></div>
+                <div><strong>WhatsApp como caixa de mensagem vs funil comercial</strong></div>
+                <div>Educa quem sente a dor, mas ainda não procura automação.</div>
+              </div>
+              <div class="creative-row">
+                <div><span class="pill">Nichado</span></div>
+                <div><strong>Recepção sobrecarregada</strong></div>
+                <div>Clínicas: dúvidas repetidas, agenda e no-show.</div>
+              </div>
+              <div class="creative-row">
+                <div><span class="pill">Nichado</span></div>
+                <div><strong>O corretor chega tarde no lead</strong></div>
+                <div>Imobiliárias: velocidade de resposta e contexto de compra.</div>
+              </div>
+              <div class="creative-row">
+                <div><span class="pill">Oferta</span></div>
+                <div><strong>Diagnóstico gratuito do WhatsApp</strong></div>
+                <div>CTA direto para público quente e remarketing.</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <div class="container">
+            <div class="section-head reveal">
+              <div>
+                <div class="label">Conteúdo e lastro</div>
+                <h2>Orgânico para confiança, repertório e remarketing.</h2>
+              </div>
+              <p class="section-copy">
+                O social não será medido principalmente por seguidores. Ele valida ângulos, gera contexto
+                antes da reunião e alimenta públicos de engajamento.
+              </p>
+            </div>
+
+            <div class="calendar">
+              <div class="calendar-day reveal"><strong>Dia 1</strong><span>O lead não esfria por falta de interesse.</span></div>
+              <div class="calendar-day reveal"><strong>Dia 2</strong><span>Demo do fluxo com IA e humano assumindo com contexto.</span></div>
+              <div class="calendar-day reveal"><strong>Dia 3</strong><span>Bastidor: mapear atendimento antes de automatizar.</span></div>
+              <div class="calendar-day reveal"><strong>Dia 4</strong><span>Seu anúncio gera lead. Seu WhatsApp perde a venda.</span></div>
+              <div class="calendar-day reveal"><strong>Dia 5</strong><span>5 perguntas que a IA poderia filtrar em clínicas.</span></div>
+              <div class="calendar-day reveal"><strong>Dia 6</strong><span>Mockup do fluxo WhatsApp -> CRM.</span></div>
+              <div class="calendar-day reveal"><strong>Dia 7</strong><span>Por que chatbot ruim irrita cliente.</span></div>
+              <div class="calendar-day reveal"><strong>Dia 8</strong><span>Antes/depois do atendimento manual vs IA.</span></div>
+              <div class="calendar-day reveal"><strong>Dia 9</strong><span>Quem responde primeiro parece mais preparado.</span></div>
+              <div class="calendar-day reveal"><strong>Dia 10</strong><span>Orçamento sem follow-up vira lead morto.</span></div>
+              <div class="calendar-day reveal"><strong>Dia 11</strong><span>Como seria o diagnóstico gratuito.</span></div>
+              <div class="calendar-day reveal"><strong>Dia 12</strong><span>Agenda cheia não significa atendimento organizado.</span></div>
+              <div class="calendar-day reveal"><strong>Dia 13</strong><span>Lead imobiliário chega sem contexto.</span></div>
+              <div class="calendar-day reveal"><strong>Dia 14</strong><span>Oferta direta para diagnóstico do WhatsApp.</span></div>
+            </div>
+          </div>
+        </section>
+
+        <section id="metrics">
+          <div class="container">
+            <div class="section-head reveal">
+              <div>
+                <div class="label">Dashboard de decisão</div>
+                <h2>O painel precisa mostrar onde o dinheiro para de avançar.</h2>
+              </div>
+              <p class="section-copy">
+                A leitura combina mídia, atendimento e comercial. CPL baixo não basta se não vira Contact,
+                CompleteRegistration, Schedule e proposta.
+              </p>
+            </div>
+
+            <div class="grid-2">
+              <article class="panel reveal">
+                <h3>Performance da esteira</h3>
+                <ul class="list">
+                  <li>Custo por lead e taxa de match form -> WhatsApp.</li>
+                  <li>Contact, CompleteRegistration e Schedule por campanha.</li>
+                  <li>Tempo até primeira resposta e leads sem resposta.</li>
+                  <li>Follow-ups realizados e conversas retomadas.</li>
+                </ul>
+              </article>
+              <article class="panel reveal">
+                <h3>Qualidade comercial</h3>
+                <ul class="list">
+                  <li>Clareza da dor e objeção principal.</li>
+                  <li>Agendamentos, comparecimento e propostas enviadas.</li>
+                  <li>Potencial de ticket e expansão de escopo.</li>
+                  <li>Motivos de perda: preço, sumiu, sem perfil ou concorrente.</li>
+                </ul>
+              </article>
+            </div>
+
+            <div class="metric-cloud reveal" style="margin-top: 22px">
+              <span class="metric-pill">CPL</span>
+              <span class="metric-pill">Match rate</span>
+              <span class="metric-pill">Contact</span>
+              <span class="metric-pill">CompleteRegistration</span>
+              <span class="metric-pill">Schedule</span>
+              <span class="metric-pill">Show rate</span>
+              <span class="metric-pill">Propostas</span>
+              <span class="metric-pill">Fechamento</span>
+              <span class="metric-pill">Escala de verba</span>
+            </div>
+          </div>
+        </section>
+
+        <section id="roadmap">
+          <div class="container">
+            <div class="section-head reveal">
+              <div>
+                <div class="label">Plano de execução</div>
+                <h2>Primeiro provar a máquina. Depois acelerar investimento.</h2>
+              </div>
+              <p class="section-copy">
+                A sequência evita mídia no escuro: antes de escala, entram tracking, destino do lead,
+                roteiro de IA, criativos base e critérios de corte.
+              </p>
+            </div>
+
+            <div class="roadmap">
+              <div class="roadmap-item reveal">
+                <div class="roadmap-index">1</div>
+                <div><strong>Fechar contrato operacional.</strong><br />Definir stage, resumo de qualificação, tags úteis e momento exato de cada evento CAPI.</div>
+              </div>
+              <div class="roadmap-item reveal">
+                <div class="roadmap-index">2</div>
+                <div><strong>Testar eventos na Meta.</strong><br />Validar Lead, Contact, CompleteRegistration e Schedule com test_event_code e depois em fluxo real sem campanha.</div>
+              </div>
+              <div class="roadmap-item reveal">
+                <div class="roadmap-index">3</div>
+                <div><strong>Criar demo e criativos.</strong><br />Produzir a demonstração da esteira e a primeira bateria de seis criativos.</div>
+              </div>
+              <div class="roadmap-item reveal">
+                <div class="roadmap-index">4</div>
+                <div><strong>Subir Rodada 1.</strong><br />Rodar 5 a 7 dias, evitar trocas impulsivas e decidir por qualidade da conversa.</div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <footer class="footer">
+        <div class="container">
+          Planejamento visual gerado a partir de <strong>marketing/estrategia-chatbots-ia.md</strong>. Página estática com GSAP, SVG, mockups HTML e visual de proposta premium de tráfego pago.
+        </div>
+      </footer>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/ScrollTrigger.min.js"></script>
+    <script>
+      const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      const hasGsap = window.gsap && window.ScrollTrigger;
+
+      if (hasGsap && !reduceMotion) {
+        gsap.registerPlugin(ScrollTrigger);
+
+        gsap.set(".hero-item, .machine .floaty, .dashboard", { opacity: 0, y: 34 });
+        gsap.timeline({ defaults: { ease: "power3.out" } })
+          .to(".hero-item", { opacity: 1, y: 0, duration: 0.9, stagger: 0.12 })
+          .to(".machine .floaty, .dashboard", { opacity: 1, y: 0, duration: 0.9, stagger: 0.09 }, "-=0.45")
+          .to(".machine-line path", { strokeDashoffset: 0, duration: 1.45, stagger: 0.13 }, "-=0.7")
+          .fromTo(".bar", { scaleY: 0.08 }, { scaleY: 1, duration: 1.1, stagger: 0.06, ease: "expo.out" }, "-=1");
+
+        gsap.to(".floaty", {
+          y: (index) => (index % 2 === 0 ? -14 : 14),
+          x: (index) => (index % 2 === 0 ? 8 : -8),
+          duration: 3.2,
+          repeat: -1,
+          yoyo: true,
+          ease: "sine.inOut",
+          stagger: 0.2,
+        });
+
+        gsap.utils.toArray("[data-parallax]").forEach((element) => {
+          gsap.to(element, {
+            y: Number(element.dataset.speed || 18),
+            ease: "none",
+            scrollTrigger: {
+              trigger: ".hero",
+              start: "top top",
+              end: "bottom top",
+              scrub: true,
+            },
+          });
+        });
+
+        gsap.utils.toArray(".reveal").forEach((element) => {
+          gsap.fromTo(element, {
+            opacity: 0,
+            y: 44,
+          }, {
+            opacity: 1,
+            y: 0,
+            duration: 0.85,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: element,
+              start: "top 82%",
+            },
+          });
+        });
+
+        gsap.utils.toArray(".map-svg path").forEach((path, index) => {
+          gsap.to(path, {
+            strokeDashoffset: 0,
+            duration: 1.3,
+            ease: "power2.out",
+            scrollTrigger: {
+              trigger: ".machine-map",
+              start: "top 70%",
+            },
+            delay: index * 0.12,
+          });
+        });
+
+        gsap.fromTo(".node", {
+          opacity: 0,
+          scale: 0.92,
+        }, {
+          opacity: 1,
+          scale: 1,
+          duration: 0.75,
+          stagger: 0.11,
+          ease: "back.out(1.4)",
+          scrollTrigger: {
+            trigger: ".machine-map",
+            start: "top 66%",
+          },
+        });
+
+        gsap.utils.toArray(".funnel-stage").forEach((stage, index) => {
+          gsap.fromTo(stage, {
+            scaleX: 0.25,
+            opacity: 0,
+          }, {
+            scaleX: 1,
+            opacity: 1,
+            duration: 0.8,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: stage,
+              start: "top 82%",
+            },
+            delay: index * 0.06,
+          });
+        });
+
+        gsap.utils.toArray(".count").forEach((element) => {
+          const raw = element.dataset.target || "0";
+          const target = Number(raw);
+          const pad = raw.length === 2 && target < 10;
+          const proxy = { value: 0 };
+
+          gsap.to(proxy, {
+            value: target,
+            duration: 1.35,
+            ease: "power2.out",
+            scrollTrigger: {
+              trigger: element,
+              start: "top 88%",
+            },
+            onUpdate: () => {
+              const value = Math.round(proxy.value);
+              element.textContent = pad ? String(value).padStart(2, "0") : String(value);
+            },
+          });
+        });
+
+        gsap.utils.toArray(".metric-card, .event-row, .phase, .niche, .calendar-day, .roadmap-item").forEach((element) => {
+          gsap.fromTo(element, {
+            opacity: 0,
+            y: 34,
+            rotateX: 4,
+          }, {
+            opacity: 1,
+            y: 0,
+            rotateX: 0,
+            duration: 0.78,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: element,
+              start: "top 86%",
+            },
+          });
+        });
+      } else {
+        document.querySelectorAll(".count").forEach((element) => {
+          element.textContent = element.dataset.target || "0";
+        });
+        document.querySelectorAll(".machine-line path, .map-svg path").forEach((path) => {
+          path.style.strokeDashoffset = "0";
+        });
+      }
+    </script>
+  </body>
+</html>

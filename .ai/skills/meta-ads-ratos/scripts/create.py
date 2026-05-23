@@ -28,9 +28,17 @@ def cmd_campaign(args):
     Objetivos: OUTCOME_SALES, OUTCOME_LEADS, OUTCOME_ENGAGEMENT,
     OUTCOME_AWARENESS, OUTCOME_TRAFFIC, OUTCOME_APP_PROMOTION
     Orcamento em centavos: 5000 = R$50,00
+
+    Regras de orcamento (API Meta):
+    - Com daily_budget/lifetime_budget na campanha (CBO): bid_strategy obrigatorio.
+      Default: LOWEST_COST_WITHOUT_CAP. Adsets NAO devem ter budget proprio.
+    - Sem budget na campanha: cada adset tem seu proprio budget.
+      Requer is_adset_budget_sharing_enabled=False (adicionado automaticamente).
     """
     init_api()
     account_id = resolve_account(args.account)
+
+    has_budget = bool(args.daily_budget or args.lifetime_budget)
 
     params = {
         'name': args.name,
@@ -39,12 +47,18 @@ def cmd_campaign(args):
         'special_ad_categories': [args.special_ad_categories] if args.special_ad_categories != 'NONE' else [],
         'buying_type': args.buying_type or 'AUCTION',
     }
-    if args.daily_budget:
-        params['daily_budget'] = args.daily_budget
-    if args.lifetime_budget:
-        params['lifetime_budget'] = args.lifetime_budget
-    if args.bid_strategy:
-        params['bid_strategy'] = args.bid_strategy
+
+    if has_budget:
+        if args.daily_budget:
+            params['daily_budget'] = args.daily_budget
+        if args.lifetime_budget:
+            params['lifetime_budget'] = args.lifetime_budget
+        # bid_strategy obrigatorio quando ha budget na campanha
+        params['bid_strategy'] = args.bid_strategy or 'LOWEST_COST_WITHOUT_CAP'
+    else:
+        # Sem budget de campanha: adsets terao budget proprio
+        params['is_adset_budget_sharing_enabled'] = False
+
     if args.start_time:
         params['start_time'] = args.start_time
     if args.stop_time:
@@ -66,6 +80,13 @@ def cmd_adset(args):
 
     Requer: campaign_id, optimization_goal, targeting (JSON), billing_event.
     Orcamento em centavos: daily_budget 5000 = R$50,00/dia
+
+    Notas:
+    - NAO passar daily_budget se a campanha ja tem CBO (budget de campanha).
+    - bid_strategy default: LOWEST_COST_WITHOUT_CAP (nao requer bid_amount).
+    - destination_type WHATSAPP requer pagina Facebook vinculada ao WhatsApp Business.
+    - targeting_automation.advantage_audience e OBRIGATORIO: 1=ativo, 0=desativado.
+      Sempre incluir no targeting JSON. Ex: {"targeting_automation":{"advantage_audience":0}}
     """
     init_api()
     account_id = resolve_account(args.account)
@@ -82,6 +103,7 @@ def cmd_adset(args):
         'billing_event': args.billing_event or 'IMPRESSIONS',
         'targeting': targeting,
         'status': args.status or 'PAUSED',
+        'bid_strategy': args.bid_strategy or 'LOWEST_COST_WITHOUT_CAP',
     }
     if args.daily_budget:
         params['daily_budget'] = args.daily_budget
@@ -89,8 +111,6 @@ def cmd_adset(args):
         params['lifetime_budget'] = args.lifetime_budget
     if args.bid_amount:
         params['bid_amount'] = args.bid_amount
-    if args.bid_strategy:
-        params['bid_strategy'] = args.bid_strategy
     if args.start_time:
         params['start_time'] = args.start_time
     if args.end_time:
@@ -188,42 +208,60 @@ def cmd_creative(args):
 @handle_fb_error
 def cmd_image(args):
     init_api()
-    import requests
-    import tempfile
-
     account_id = resolve_account(args.account)
 
-    # Download image to temp file
-    print("Baixando imagem...", file=sys.stderr)
-    response = requests.get(args.url, stream=True)
-    response.raise_for_status()
+    if not args.url and not args.file:
+        print_error("Informe --url ou --file")
+        sys.exit(1)
 
-    # Determine extension from URL or content-type
-    ext = '.jpg'
-    content_type = response.headers.get('content-type', '')
-    if 'png' in content_type or args.url.lower().endswith('.png'):
-        ext = '.png'
-    elif 'webp' in content_type or args.url.lower().endswith('.webp'):
-        ext = '.webp'
+    params = {}
+    if args.name:
+        params['name'] = args.name
 
-    tmp = tempfile.NamedTemporaryFile(suffix=ext, delete=False)
-    try:
-        for chunk in response.iter_content(chunk_size=8192):
-            tmp.write(chunk)
-        tmp.close()
+    import requests, tempfile
 
-        params = {}
-        if args.name:
-            params['name'] = args.name
+    token = os.environ.get('META_ADS_TOKEN')
+    upload_url = f'https://graph.facebook.com/v21.0/{account_id}/adimages'
 
-        account = AdAccount(account_id)
-        result = account.create_ad_image(params=params, files={'filename': tmp.name})
-        safe_delay(1)
+    def upload_file(file_path):
+        fname = os.path.basename(file_path)
+        with open(file_path, 'rb') as f:
+            resp = requests.post(upload_url, data={'access_token': token},
+                                 files={'filename': (fname, f)})
+        resp.raise_for_status()
+        return resp.json()
 
-        print(f"Imagem enviada com sucesso", file=sys.stderr)
-        print_json(result)
-    finally:
-        os.unlink(tmp.name)
+    if args.file:
+        file_path = os.path.abspath(args.file)
+        if not os.path.isfile(file_path):
+            print_error(f"Arquivo não encontrado: {file_path}")
+            sys.exit(1)
+        print(f"Enviando arquivo local: {file_path}", file=sys.stderr)
+        result = upload_file(file_path)
+    else:
+        print(f"Baixando imagem de URL...", file=sys.stderr)
+        response = requests.get(args.url, stream=True)
+        response.raise_for_status()
+
+        ext = '.jpg'
+        content_type = response.headers.get('content-type', '')
+        if 'png' in content_type or args.url.lower().endswith('.png'):
+            ext = '.png'
+        elif 'webp' in content_type or args.url.lower().endswith('.webp'):
+            ext = '.webp'
+
+        tmp = tempfile.NamedTemporaryFile(suffix=ext, delete=False)
+        try:
+            for chunk in response.iter_content(chunk_size=8192):
+                tmp.write(chunk)
+            tmp.close()
+            result = upload_file(tmp.name)
+        finally:
+            os.unlink(tmp.name)
+
+    safe_delay(1)
+    print(f"Imagem enviada com sucesso", file=sys.stderr)
+    print_json(result)
 
 
 @handle_fb_error
@@ -370,7 +408,8 @@ def main():
     # --- image ---
     p = sub.add_parser("image", help="Upload de imagem")
     add_account_arg(p)
-    p.add_argument("--url", required=True, help="URL da imagem para upload")
+    p.add_argument("--url", help="URL da imagem para upload")
+    p.add_argument("--file", help="Caminho local do arquivo de imagem (alternativa ao --url)")
     p.add_argument("--name", help="Nome da imagem")
 
     # --- video ---

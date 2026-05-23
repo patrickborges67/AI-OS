@@ -58,13 +58,12 @@ O processo todo leva ~10 minutos.
 1. Acessar https://developers.facebook.com/tools/explorer/
 2. No campo **"Meta App"** (canto superior direito), selecionar o app criado no passo 2
 3. Em **"User or Page"**, manter **"User Token"**
-4. Clicar em **"Adicionar permissao"** (ou "Add a Permission") e adicionar TODAS estas:
-   - `ads_management`
-   - `ads_read`
-   - `business_management`
-   - `pages_read_engagement`
-   - `pages_show_list`
-   - `read_insights`
+4. Clicar em **"Adicionar permissao"** (ou "Add a Permission") e adicionar apenas:
+   - `ads_management` — criar/editar campanhas, adsets, criativos, ads, upload de imagens
+   - `ads_read` — ler campanhas, ad sets, ads e insights de performance
+
+   **NAO adicionar:** `business_management`, `pages_read_engagement`, `pages_show_list`, `read_insights`.
+   Essas permissoes sao desnecessarias para a skill e disparam App Review ao tentar colocar o app em modo Live.
 5. Clicar em **"Gerar Token de Acesso"** (botao azul)
 6. Autorizar quando o Facebook pedir (popup de login)
 7. **Copiar o token** que aparece no campo "Access Token"
@@ -147,7 +146,7 @@ Antes de continuar com o setup da skill, verificar:
 - [ ] App criado em developers.facebook.com
 - [ ] App ID anotado (numero tipo `905545132380980`)
 - [ ] Token gerado no Graph API Explorer (comeca com `EAAM...`)
-- [ ] Permissoes: `ads_management`, `ads_read`, `business_management`
+- [ ] Permissoes: apenas `ads_management` e `ads_read`
 - [ ] App em modo **Live** (nao Development)
 - [ ] Token estendido para 60 dias (opcional mas recomendado)
 

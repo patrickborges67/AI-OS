@@ -45,6 +45,16 @@ clientes:
     moeda: "BRL"
     notas: "Conta principal de anuncios da EssentialWeb. Business: Essential Web. Pixel padrao do site e pixel especifico da pagina /chatbots cadastrados."
 
+  estudio-lumina:
+    nome: "Estúdio Lumina"
+    conta_anuncio: "act_1399522635268024"
+    pagina_facebook: "1075178832353494"
+    instagram_id: "17841443954905257"
+    instagram_username: "@estudiolumina67"
+    pixel_id: "871404632654375"
+    moeda: "BRL"
+    notas: "Ensaios fotográficos com IA para datas especiais. Fase de lançamento. CAPI configurado no n8n (workflow Lumina v2)."
+
   patrick-borges:
     nome: "Patrick Borges"
     conta_anuncio: "act_495675287891204"

@@ -119,6 +119,71 @@ create.py ad --account act_XXX --name "carrossel-NOME" \
 
 ---
 
+## Click-to-WhatsApp (Mensagens WhatsApp)
+
+Campanha para direcionar leads diretamente para o WhatsApp via anúncio.
+
+### Pré-requisito obrigatório
+
+**A Página Facebook DEVE estar vinculada a uma conta WhatsApp Business.**
+Sem isso, a criação do adset falha com erro 2446886.
+Configurar em: Meta Business Suite → Configurações → Contas do WhatsApp.
+
+### Configuração
+
+| Nível | Campo | Valor |
+|---|---|---|
+| **Campaign** | objective | `OUTCOME_ENGAGEMENT` |
+| **Campaign** | special_ad_categories | `[]` |
+| **Campaign** | budget | Sem budget na campanha — usar orçamento no ad set |
+| **Ad Set** | optimization_goal | `CONVERSATIONS` |
+| **Ad Set** | destination_type | `WHATSAPP` |
+| **Ad Set** | billing_event | `IMPRESSIONS` |
+| **Ad Set** | bid_strategy | `LOWEST_COST_WITHOUT_CAP` (default) |
+| **Ad Set** | promoted_object | `{"page_id": "PAGE_ID"}` |
+| **Ad Set** | daily_budget | Orçamento em centavos (ex: 1000 = R$10) |
+| **Creative** | call_to_action_type | `WHATSAPP_MESSAGE` |
+| **Creative** | instagram_user_id | ID da conta Instagram (obrigatório) |
+
+### Regras críticas
+
+- **Nunca colocar budget na campanha e no adset ao mesmo tempo** — API rejeita com erro 1885621.
+- **Campaign sem budget**: adiciona `is_adset_budget_sharing_enabled: false` automaticamente (script já faz isso).
+- **Campaign com budget (CBO)**: `bid_strategy` vira obrigatório — o script já usa `LOWEST_COST_WITHOUT_CAP` como default.
+- **bid_strategy no adset**: sempre passar `LOWEST_COST_WITHOUT_CAP` explicitamente — o API às vezes assume `LOWEST_COST_WITH_BID_CAP` como default, que exige `bid_amount`.
+
+### Exemplo completo
+
+```bash
+# 1. Campanha (sem budget — budget vai no adset)
+create.py campaign --account act_XXX --name "lumina-aniversario-adulto-01" \
+  --objective OUTCOME_ENGAGEMENT
+
+# 2. Ad Set
+create.py adset --account act_XXX --name "mulheres-25-45-br" \
+  --campaign CAMP_ID \
+  --optimization-goal CONVERSATIONS \
+  --billing-event IMPRESSIONS \
+  --destination-type WHATSAPP \
+  --promoted-object '{"page_id":"PAGE_ID"}' \
+  --targeting '{"age_min":25,"age_max":45,"genders":[2],"geo_locations":{"countries":["BR"]},"targeting_automation":{"advantage_audience":1}}' \
+  --daily-budget 1000
+
+# 3. Imagem
+create.py image --account act_XXX --url "https://..."
+
+# 4. Creative
+create.py creative --account act_XXX --name "lumina-aniversario-v1" \
+  --instagram-user-id IG_ID \
+  --object-story-spec '{"page_id":"PAGE_ID","link_data":{"message":"TEXTO","call_to_action":{"type":"WHATSAPP_MESSAGE","value":{"app_destination":"WHATSAPP"}}}}' \
+
+# 5. Ad
+create.py ad --account act_XXX --name "lumina-aniversario-v1" \
+  --adset ADSET_ID --creative '{"creative_id":"CREATIVE_ID"}'
+```
+
+---
+
 ## Trafego para Site (Website Traffic)
 
 > TODO: documentar quando tivermos padroes validados

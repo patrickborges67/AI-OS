@@ -16,6 +16,18 @@ Regras aprendidas durante o uso. O Claude DEVE ler este arquivo antes de criar q
 **Regra:** Ao criar criativos pra Instagram, SEMPRE usar --instagram-user-id com o ID da conta Instagram do cliente (do contas.yaml).
 **Contexto:** Sem instagram_user_id, o ad não publica no Instagram. Erro: "Seu anúncio deve ser associado a uma conta do Instagram."
 
+### 2026-05-20 — Budget em um nível só (campanha OU adset, nunca os dois)
+**Regra:** Nunca passar daily_budget no adset se a campanha já tem daily_budget, e vice-versa. API rejeita com erro 1885621.
+**Contexto:** Criação de adset para Lumina falhou repetidamente até isolar que o budget duplo era o bloqueio.
+
+### 2026-05-20 — bid_strategy default da API pode ser LOWEST_COST_WITH_BID_CAP
+**Regra:** Sempre incluir bid_strategy explicitamente. O script agora defaulta para LOWEST_COST_WITHOUT_CAP. LOWEST_COST_WITH_BID_CAP exige bid_amount e causa erro 1815857 se não fornecido.
+**Contexto:** Todas as tentativas de criar adset falhavam com "bid_amount obrigatório" porque a API assumia bid strategy com teto.
+
+### 2026-05-20 — Click-to-WhatsApp exige WhatsApp vinculado à Página
+**Regra:** Antes de criar campanha Click-to-WhatsApp, confirmar que a Página Facebook está vinculada a uma conta WhatsApp Business. Erro 2446886 se não estiver.
+**Contexto:** Adset para Lumina com destination_type WHATSAPP falhou porque a página não tinha WhatsApp Business associado.
+
 ### 2026-04-03 — Desligar format options em carrosséis
 **Regra:** Ao criar ads de carrossel, SEMPRE passar --degrees-of-freedom-spec com OPT_OUT pra carousel_to_video, image_touchups e standard_enhancements.
 **Contexto:** "Blocos de coleção" e "mídia única" distorcem o carrossel sequencial. Desligar pra manter ordem dos slides.
