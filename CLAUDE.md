@@ -15,7 +15,8 @@ Workspace central da EssentialWeb para marketing, comercial, automacoes, projeto
 - `dados/` - arquivos para analise, imports temporarios, PDFs, CSVs e imagens de apoio.
 - `templates/` - modelos reutilizaveis de skills, marca, ferramentas e perfis.
 - `.ai/workflows/` - workflows agnosticos do AI OS.
-- `.ai/skills/` - skills locais especificas deste workspace.
+- `.claude/skills/` - skills locais especificas deste workspace (versionadas no git, carregadas automaticamente).
+- `.env` - segredos e tokens compartilhados pelas skills (raiz do projeto, fora do git).
 - `tarefas.md` - lista de pendencias corrente.
 
 ## Sobre o negocio
@@ -72,9 +73,8 @@ Nao e necessario listar o que foi lido nem confirmar a leitura. Use o contexto n
 Antes de executar qualquer tarefa, verifique se existe um workflow ou skill relevante em:
 
 1. `.ai/workflows/`
-2. `.ai/skills/`
+2. `.claude/skills/`
 3. `.claude/commands/` como fallback de compatibilidade
-4. `.claude/skills/` como fallback de compatibilidade
 
 Se encontrar um workflow ou skill relevante, siga as instrucoes dele. Se nao encontrar, execute a tarefa normalmente.
 
@@ -128,11 +128,10 @@ Mostrar o que vai mudar antes de salvar. Nao reformatar o arquivo inteiro; adici
 Quando Patrick pedir para criar uma nova skill:
 
 1. Verificar se existe um template relevante em `templates/skills/`. Se existir, usar como base e adaptar.
-2. Perguntar: "Essa skill e especifica pra esse projeto ou vai ser util em qualquer projeto?"
-3. Se for especifica deste negocio, salvar em `.ai/skills/nome-da-skill/SKILL.md`.
-4. Se for util em qualquer projeto, salvar no local global suportado pelo agente atual. Se nao houver local global, salvar em `.ai/skills/` e documentar a limitacao.
-5. Ler `_contexto/empresa.md` e `_contexto/preferencias.md` para calibrar o conteudo.
-6. Se a skill precisar de arquivos de apoio, criar dentro da pasta da skill.
+2. Salvar a skill em `.claude/skills/nome-da-skill/SKILL.md`. Esse e o diretorio de skills do workspace, versionado no git e carregado automaticamente (invocavel por `/nome-da-skill`).
+3. Ler `_contexto/empresa.md` e `_contexto/preferencias.md` para calibrar o conteudo.
+4. Se a skill precisar de arquivos de apoio, criar dentro da pasta da skill.
+5. Segredos e tokens vao no `.env` na raiz do projeto, nunca dentro da pasta da skill.
 
 ---
 

@@ -33,7 +33,7 @@ Não é necessário listar o que foi lido nem confirmar a leitura. Use o context
 Antes de executar qualquer tarefa, verifique se existe um workflow ou skill relevante em:
 
 1. `.ai/workflows/`
-2. `.ai/skills/`
+2. `.claude/skills/`
 Se encontrar um workflow ou skill relevante, siga as instruções dele. Se não encontrar, execute a tarefa normalmente.
 
 Ao concluir uma tarefa que não tinha skill mas parece repetível, pergunte:
@@ -55,16 +55,16 @@ Os workflows agnósticos ficam em `.ai/workflows/`:
 
 ## Skills locais disponíveis
 
-- `google-ads-ratos` — skill local em `.ai/skills/google-ads-ratos/` para configurar, ler e operar campanhas Google Ads via SDK oficial.
-- `ga4-ratos` — skill local em `.ai/skills/ga4-ratos/` para consultar propriedades, relatórios, tráfego, UTMs, conversões e dados em tempo real do GA4.
-- `ads-ratos` — skill local em `.ai/skills/ads-ratos/` para diagnóstico, histórico, auditoria e relatórios de tráfego pago integrando Meta Ads, Google Ads e GA4.
+- `google-ads-ratos` — skill local em `.claude/skills/google-ads-ratos/` para configurar, ler e operar campanhas Google Ads via SDK oficial.
+- `ga4-ratos` — skill local em `.claude/skills/ga4-ratos/` para consultar propriedades, relatórios, tráfego, UTMs, conversões e dados em tempo real do GA4.
+- `ads-ratos` — skill local em `.claude/skills/ads-ratos/` para diagnóstico, histórico, auditoria e relatórios de tráfego pago integrando Meta Ads, Google Ads e GA4.
 - `ads-ratos` carrega `references/pedro-sobral-campanhas.md` como instrucao operacional para estrategia, criacao, segmentacao, testes, otimizacao e auditoria de campanhas de trafego pago.
-- `carrossel` — skill local em `.ai/skills/carrossel/` para criar carrosseis editoriais em HTML/PNG.
-- `gpt-image-2` — skill local em `.ai/skills/gpt-image-2/` para planejar e gerar imagens com GPT Image 2, incluindo previews baratos, escolha de tamanho/formato/background e confirmação antes de `quality: high`.
-- `carrossel-essentialweb` — skill local em `.ai/skills/carrossel-essentialweb/` para criar carrosséis editoriais da EssentialWeb em HTML e PNG, usando a metodologia legado de `projetos/carrosseis claude` e salvando novos outputs em `marketing/carrosseis/`.
+- `carrossel` — skill local em `.claude/skills/carrossel/` para criar carrosseis editoriais em HTML/PNG.
+- `gpt-image-2` — skill local em `.claude/skills/gpt-image-2/` para planejar e gerar imagens com GPT Image 2, incluindo previews baratos, escolha de tamanho/formato/background e confirmação antes de `quality: high`.
+- `carrossel-essentialweb` — skill local em `.claude/skills/carrossel-essentialweb/` para criar carrosséis editoriais da EssentialWeb em HTML e PNG, usando a metodologia legado de `projetos/carrosseis claude` e salvando novos outputs em `marketing/carrosseis/`.
 - O carrossel `chatbot-whatsapp-gambiarra` fica em `marketing/carrosseis/chatbot-whatsapp-gambiarra/`; novos carrosséis devem seguir a mesma estrutura `carousel-text.md`, `carousel.html`, `assets/` e `slides-png/`.
-- `google-ads-ratos` está configurada em modo teste com MCC `3202454490` e conta Ads `7574792015`; IDs de produção ficam preservados em `.ai/skills/google-ads-ratos/contas.yaml`.
-- `ga4-ratos` está configurada para a propriedade GA4 `533408886` (`Essential Web site`) com OAuth próprio no `.env` compartilhado de `.ai/skills/`.
+- `google-ads-ratos` está configurada em modo teste com MCC `3202454490` e conta Ads `7574792015`; IDs de produção ficam preservados em `.claude/skills/google-ads-ratos/contas.yaml`.
+- `ga4-ratos` está configurada para a propriedade GA4 `533408886` (`Essential Web site`) com OAuth próprio no `.env` compartilhado de `.claude/skills/`.
 - O site institucional da EssentialWeb fica em `projetos/essential-web/` e usa GA4 `533408886` (`Essential Web site`).
 
 ## Aprender com correções
@@ -108,8 +108,8 @@ Quando o usuário pedir para criar uma nova skill:
 
 1. Verificar se existe um template relevante em `templates/skills/`. Se existir, usar como base e adaptar ao contexto do usuário.
 2. Perguntar: "Essa skill é específica pra esse projeto ou vai ser útil em qualquer projeto?"
-3. Se for específica deste negócio, salvar em `.ai/skills/nome-da-skill/SKILL.md`.
-4. Se for útil em qualquer projeto, salvar no local global suportado pelo agente atual. Se não houver local global, salvar em `.ai/skills/` e documentar a limitação.
+3. Salvar a skill em `.claude/skills/nome-da-skill/SKILL.md`. Esse é o diretório de skills do workspace, versionado no git e carregado automaticamente (invocável por `/nome-da-skill`).
+4. Segredos e tokens vão no `.env` na raiz do projeto (não dentro da pasta da skill).
 5. Ler `_contexto/empresa.md` e `_contexto/preferencias.md` para calibrar o conteúdo da skill.
 6. Se a skill precisar de arquivos de apoio, como templates, referências ou exemplos, criar dentro da pasta da skill.
 
