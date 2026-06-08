@@ -14,6 +14,19 @@
 
 clientes:
 
+  estudio-lumina:
+    nome: "Estúdio Lumina"
+    nicho: "ensaios fotográficos com IA (low ticket)"
+    meta:
+      conta_anuncio: "act_1399522635268024"
+      pagina_facebook: "1075178832353494"
+      instagram_id: "17841443954905257"
+      instagram_username: "@estudiolumina67"
+      pixel_id: "871404632654375"
+    moeda: "BRL"
+    timezone: "America/Campo_Grande"
+    notas: "Campanha CTWA (OUTCOME_ENGAGEMENT/CONVERSATIONS/WHATSAPP). Fase de lançamento. CAPI de Purchase via backend n8nCRM no pixel 871404632654375. Atendimento WhatsApp ainda manual (agente IA nao ativado)."
+
   essentialweb:
     nome: "EssentialWeb"
     nicho: "tecnologia"
