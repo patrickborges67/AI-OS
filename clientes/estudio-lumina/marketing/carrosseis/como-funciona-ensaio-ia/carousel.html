@@ -1,0 +1,732 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Estúdio Lumina - Como funciona o ensaio com IA</title>
+  <style>
+    :root {
+      --black: #000000;
+      --dark: #070604;
+      --gold: #C9A050;
+      --gold-light: #E2B96A;
+      --gold-dark: #8B6520;
+      --off: #F5F0E8;
+      --muted: rgba(245, 240, 232, 0.68);
+      --ink: #16120C;
+      --paper: #F5F0E8;
+      --line: rgba(201, 160, 80, 0.24);
+      --grad: linear-gradient(135deg, #E2B96A 0%, #C9A050 45%, #8B6520 100%);
+      --serif: "Cormorant Garamond", "Playfair Display", Georgia, serif;
+      --sans: "Inter", "Plus Jakarta Sans", Arial, sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: #111;
+      color: var(--off);
+      font-family: var(--sans);
+    }
+
+    .toolbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      padding: 14px;
+      background: rgba(0, 0, 0, 0.82);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .toolbar button {
+      border: 1px solid rgba(226, 185, 106, 0.45);
+      background: rgba(226, 185, 106, 0.12);
+      color: var(--off);
+      padding: 10px 16px;
+      border-radius: 4px;
+      font-size: 13px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      cursor: pointer;
+    }
+
+    .deck {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 28px;
+      padding: 28px 0 56px;
+    }
+
+    body.preview .deck {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, 324px);
+      justify-content: center;
+      align-items: start;
+      gap: 18px;
+      padding: 26px;
+    }
+
+    body.preview .slide {
+      transform: scale(0.30);
+      transform-origin: top left;
+      margin-right: -756px;
+      margin-bottom: -945px;
+    }
+
+    .slide {
+      width: 1080px;
+      height: 1350px;
+      position: relative;
+      overflow: hidden;
+      background: var(--dark);
+      flex: 0 0 auto;
+    }
+
+    .accent {
+      position: absolute;
+      inset: 0 0 auto;
+      height: 8px;
+      background: var(--grad);
+      z-index: 30;
+    }
+
+    .brand {
+      position: absolute;
+      top: 38px;
+      left: 56px;
+      right: 56px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 20;
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: rgba(245, 240, 232, 0.52);
+    }
+
+    .slide.light .brand { color: rgba(22, 18, 12, 0.42); }
+
+    .mark {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo-badge {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      border: 1px solid rgba(226,185,106,0.42);
+      background: #000;
+      overflow: hidden;
+      display: block;
+    }
+
+    .logo-badge img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transform: scale(1.16);
+    }
+
+    .progress {
+      position: absolute;
+      left: 56px;
+      right: 56px;
+      bottom: 34px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      z-index: 25;
+    }
+
+    .track {
+      height: 3px;
+      flex: 1;
+      border-radius: 99px;
+      overflow: hidden;
+      background: rgba(255,255,255,0.12);
+    }
+
+    .light .track { background: rgba(22,18,12,0.1); }
+    .fill { height: 100%; background: var(--gold-light); }
+    .num {
+      width: 34px;
+      text-align: right;
+      color: rgba(245,240,232,0.34);
+      font-size: 14px;
+      font-weight: 600;
+    }
+    .light .num { color: rgba(22,18,12,0.28); }
+
+    .content {
+      position: absolute;
+      left: 56px;
+      right: 56px;
+      top: 118px;
+      bottom: 90px;
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding-bottom: 46px;
+    }
+
+    .tag {
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+      color: var(--gold-light);
+      margin-bottom: 26px;
+    }
+
+    h1, h2, p { margin: 0; }
+
+    .headline {
+      font-family: var(--serif);
+      font-size: 88px;
+      line-height: 0.94;
+      letter-spacing: 0;
+      text-transform: uppercase;
+      color: #fff;
+      font-weight: 700;
+      max-width: 900px;
+    }
+
+    .headline em,
+    .title em {
+      color: var(--gold-light);
+      font-style: normal;
+    }
+
+    .title {
+      font-family: var(--serif);
+      font-size: 74px;
+      line-height: 0.98;
+      letter-spacing: 0;
+      text-transform: uppercase;
+      color: #fff;
+      font-weight: 700;
+      margin-bottom: 34px;
+    }
+
+    .light .title { color: var(--ink); }
+
+    .body {
+      font-size: 38px;
+      line-height: 1.43;
+      color: var(--muted);
+      max-width: 900px;
+      font-weight: 400;
+    }
+
+    .body strong { color: #fff; font-weight: 700; }
+    .light .body { color: rgba(22,18,12,0.62); }
+    .light .body strong { color: var(--ink); }
+
+    .cover-bg {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 70% 18%, rgba(226,185,106,0.18), transparent 30%),
+        linear-gradient(160deg, #000 0%, #090806 52%, #171006 100%);
+    }
+
+    .cover::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(to bottom, rgba(0,0,0,0.02) 0%, rgba(0,0,0,0.25) 54%, rgba(0,0,0,0.92) 100%);
+      z-index: 1;
+    }
+
+    .cover-photo {
+      position: absolute;
+      inset: 0;
+      width: auto;
+      height: auto;
+      border-radius: 0;
+      overflow: hidden;
+      border: 0;
+      box-shadow: none;
+      z-index: 2;
+      background: #000;
+    }
+
+    .cover-photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      object-position: center;
+      display: block;
+      background: #000;
+      opacity: 0.82;
+    }
+
+    .cover-photo::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, transparent 62%, rgba(0,0,0,0.42) 100%);
+      pointer-events: none;
+    }
+
+    .cover .cover-photo::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 62% 24%, rgba(226,185,106,0.12), transparent 30%),
+        linear-gradient(to bottom, rgba(0,0,0,0.26) 0%, rgba(0,0,0,0.12) 32%, rgba(0,0,0,0.52) 62%, rgba(0,0,0,0.96) 100%),
+        linear-gradient(to right, rgba(0,0,0,0.72) 0%, rgba(0,0,0,0.26) 42%, rgba(0,0,0,0.34) 100%);
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    .cover .content {
+      z-index: 2;
+      bottom: 86px;
+    }
+
+    .cover .tag {
+      display: inline-flex;
+      align-items: center;
+      width: fit-content;
+      padding: 12px 20px;
+      border: 1px solid rgba(226,185,106,0.42);
+      background: rgba(0,0,0,0.38);
+      backdrop-filter: blur(8px);
+      border-radius: 4px;
+      margin-bottom: 30px;
+    }
+
+    .proof-frame {
+      width: 520px;
+      height: 650px;
+      border: 1px solid rgba(226,185,106,0.28);
+      background: #050505;
+      overflow: hidden;
+      margin-bottom: 44px;
+      margin-left: auto;
+      margin-right: auto;
+      position: relative;
+      box-shadow: 0 30px 90px rgba(0,0,0,0.35);
+    }
+
+    .proof-frame.compact {
+      width: 500px;
+      height: 625px;
+    }
+
+    .wide-photo {
+      width: 100%;
+      height: 510px;
+      border: 1px solid rgba(226,185,106,0.28);
+      background: #050505;
+      overflow: hidden;
+      margin-bottom: 44px;
+      position: relative;
+      box-shadow: 0 30px 90px rgba(0,0,0,0.35);
+    }
+
+    .wide-photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      display: block;
+    }
+
+    .wide-photo.contain img {
+      object-fit: contain;
+      object-position: center;
+    }
+
+    .wide-photo.top img {
+      object-position: center top;
+    }
+
+    .wide-photo::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, rgba(0,0,0,0.02), rgba(0,0,0,0.16));
+      pointer-events: none;
+    }
+
+    .proof-frame img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      display: block;
+    }
+
+    .proof-caption-row {
+      position: absolute;
+      left: 22px;
+      right: 22px;
+      bottom: 22px;
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .proof-frame.single .proof-caption-row {
+      justify-content: flex-start;
+    }
+
+    .proof-pill {
+      padding: 11px 16px;
+      background: rgba(0,0,0,0.68);
+      border: 1px solid rgba(255,255,255,0.15);
+      color: #fff;
+      font-size: 12px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+
+    .image-brief {
+      border: 1px solid rgba(201,160,80,0.28);
+      background:
+        linear-gradient(135deg, rgba(255,255,255,0.78), rgba(255,255,255,0.48)),
+        radial-gradient(circle at 80% 15%, rgba(226,185,106,0.24), transparent 36%);
+      padding: 46px 50px;
+      margin-bottom: 44px;
+      min-height: 360px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      box-shadow: 0 22px 70px rgba(0,0,0,0.08);
+    }
+
+    .image-brief .brief-kicker {
+      color: var(--gold-dark);
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+
+    .image-brief .brief-text {
+      color: rgba(22,18,12,0.68);
+      font-family: var(--serif);
+      font-size: 43px;
+      line-height: 1.08;
+    }
+
+    .split-proof {
+      display: grid;
+      grid-template-columns: 1fr 1.08fr;
+      gap: 26px;
+      margin-bottom: 40px;
+    }
+
+    .proof-card {
+      min-height: 450px;
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1px solid rgba(226,185,106,0.22);
+      position: relative;
+      background: #111;
+    }
+
+    .proof-card.result {
+      background-image: url("assets/capa.png");
+      background-size: auto 166%;
+      background-position: right center;
+    }
+
+    .proof-card.before {
+      background-image: url("assets/slide 3.png");
+      background-size: 330%;
+      background-position: 2% 84%;
+    }
+
+    .proof-label {
+      position: absolute;
+      left: 20px;
+      bottom: 20px;
+      padding: 9px 13px;
+      background: rgba(0,0,0,0.62);
+      border: 1px solid rgba(255,255,255,0.18);
+      color: #fff;
+      font-size: 12px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+    }
+
+    .light {
+      background:
+        radial-gradient(circle at 88% 10%, rgba(226,185,106,0.18), transparent 34%),
+        var(--paper);
+    }
+
+    .scenario-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 18px;
+      margin-bottom: 42px;
+    }
+
+    .scenario {
+      border: 1px solid rgba(226,185,106,0.32);
+      background: rgba(255,255,255,0.045);
+      border-radius: 8px;
+      padding: 28px 30px;
+      min-height: 116px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .scenario span {
+      color: var(--gold-light);
+      font-family: var(--serif);
+      font-size: 38px;
+      line-height: 1;
+      text-transform: uppercase;
+    }
+
+    .scenario small {
+      color: rgba(245,240,232,0.48);
+      margin-top: 10px;
+      font-size: 16px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .process-card {
+      border-left: 7px solid var(--gold);
+      background: #fff;
+      border-radius: 8px;
+      padding: 48px 52px;
+      margin-bottom: 42px;
+      box-shadow: 0 22px 70px rgba(0,0,0,0.08);
+    }
+
+    .process-row {
+      display: flex;
+      gap: 22px;
+      align-items: flex-start;
+      color: rgba(22,18,12,0.68);
+      font-size: 31px;
+      line-height: 1.35;
+      margin-bottom: 20px;
+    }
+
+    .process-row:last-child { margin-bottom: 0; }
+    .process-row b {
+      color: var(--gold-dark);
+      font-size: 24px;
+      line-height: 1.8;
+      min-width: 34px;
+    }
+
+    .phone {
+      width: 560px;
+      border-radius: 46px;
+      background: #0f0f0f;
+      border: 8px solid #222;
+      padding: 38px 30px;
+      box-shadow: 0 36px 90px rgba(0,0,0,0.35);
+      margin-bottom: 44px;
+    }
+
+    .phone-top {
+      color: rgba(255,255,255,0.58);
+      text-align: center;
+      font-size: 18px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding-bottom: 22px;
+      margin-bottom: 22px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .bubble {
+      width: fit-content;
+      max-width: 430px;
+      padding: 18px 22px;
+      border-radius: 22px;
+      font-size: 25px;
+      line-height: 1.24;
+      margin-bottom: 16px;
+      color: #f8f8f8;
+      background: #232323;
+    }
+
+    .bubble.sent {
+      margin-left: auto;
+      background: #1f7f4c;
+      color: #fff;
+    }
+
+    .bubble.received {
+      margin-right: auto;
+      background: linear-gradient(135deg, #C9A050, #8B6520);
+      color: #fff;
+    }
+
+    .gradient {
+      background:
+        radial-gradient(circle at 82% 14%, rgba(255,255,255,0.18), transparent 34%),
+        linear-gradient(150deg, #000 0%, #171006 38%, #8B6520 100%);
+    }
+
+    .cta-box {
+      background: #fff;
+      border: 2px solid rgba(201,160,80,0.22);
+      border-radius: 8px;
+      padding: 46px 50px;
+      margin-top: 44px;
+    }
+
+    .cta-label {
+      color: rgba(22,18,12,0.48);
+      font-size: 18px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      margin-bottom: 18px;
+      font-weight: 700;
+    }
+
+    .cta-main {
+      font-family: var(--serif);
+      color: var(--gold-dark);
+      font-size: 68px;
+      line-height: 0.96;
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+  </style>
+</head>
+<body class="preview">
+  <div class="toolbar">
+    <button onclick="document.body.classList.toggle('preview')">Alternar preview / tamanho real</button>
+  </div>
+
+  <main class="deck">
+    <section class="slide cover" id="slide-1">
+      <div class="cover-bg"></div>
+      <div class="cover-photo"><img src="assets/capa.png" alt="Resultado de ensaio de aniversário criado pela Lumina"></div>
+      <div class="accent"></div>
+      <div class="brand"><span class="mark"><span class="logo-badge"><img src="assets/logo.png" alt="Logo Estúdio Lumina"></span>@estudiolumina67</span><span>2026</span></div>
+      <div class="content">
+        <div class="tag">Ensaio com IA</div>
+        <h1 class="headline">Transforme uma foto simples em um <em>ensaio de aniversário</em></h1>
+      </div>
+      <div class="progress"><div class="track"><div class="fill" style="width:14.28%"></div></div><div class="num">1/7</div></div>
+    </section>
+
+    <section class="slide" id="slide-2">
+      <div class="accent"></div>
+      <div class="brand"><span class="mark"><span class="logo-badge"><img src="assets/logo.png" alt="Logo Estúdio Lumina"></span>@estudiolumina67</span><span>2026</span></div>
+      <div class="content">
+        <div class="wide-photo">
+          <img src="assets/slide 2 16.9.png" alt="Antes e depois do ensaio de aniversário">
+          <div class="proof-caption-row">
+            <div class="proof-pill">foto enviada</div>
+            <div class="proof-pill">ensaio final</div>
+          </div>
+        </div>
+        <div class="tag">O resultado</div>
+        <h2 class="title">Parece produção de <em>estúdio</em></h2>
+        <p class="body">O ensaio final tem cenário, luz, roupa e composição de aniversário. Só que o processo começa com uma foto comum enviada pelo celular.</p>
+      </div>
+      <div class="progress"><div class="track"><div class="fill" style="width:28.56%"></div></div><div class="num">2/7</div></div>
+    </section>
+
+    <section class="slide light" id="slide-3">
+      <div class="accent"></div>
+      <div class="brand"><span class="mark"><span class="logo-badge"><img src="assets/logo.png" alt="Logo Estúdio Lumina"></span>@estudiolumina67</span><span>2026</span></div>
+      <div class="content">
+        <div class="proof-frame single">
+          <img src="assets/slide 3.png" alt="Foto de referência enviada para começar o ensaio">
+          <div class="proof-caption-row">
+            <div class="proof-pill">foto de referência</div>
+          </div>
+        </div>
+        <div class="tag">Passo 1</div>
+        <h2 class="title">Mande uma foto simples</h2>
+        <p class="body">A foto serve como referência para preservar o rosto e criar imagens que ainda pareçam com a pessoa fotografada.</p>
+      </div>
+      <div class="progress"><div class="track"><div class="fill" style="width:42.84%"></div></div><div class="num">3/7</div></div>
+    </section>
+
+    <section class="slide" id="slide-4">
+      <div class="accent"></div>
+      <div class="brand"><span class="mark"><span class="logo-badge"><img src="assets/logo.png" alt="Logo Estúdio Lumina"></span>@estudiolumina67</span><span>2026</span></div>
+      <div class="content">
+        <div class="wide-photo top">
+          <img src="assets/slide 4 16.9.png" alt="Opções de cenário para ensaio de aniversário">
+          <div class="proof-caption-row">
+            <div class="proof-pill">cenários</div>
+            <div class="proof-pill">aniversário</div>
+          </div>
+        </div>
+        <div class="tag">Passo 2</div>
+        <h2 class="title">Escolha o cenário do <em>ensaio</em></h2>
+        <p class="body">Balões, editorial, preto e branco, festa sofisticada ou outro estilo de aniversário. O cenário define o clima das fotos finais.</p>
+      </div>
+      <div class="progress"><div class="track"><div class="fill" style="width:57.12%"></div></div><div class="num">4/7</div></div>
+    </section>
+
+    <section class="slide light" id="slide-5">
+      <div class="accent"></div>
+      <div class="brand"><span class="mark"><span class="logo-badge"><img src="assets/logo.png" alt="Logo Estúdio Lumina"></span>@estudiolumina67</span><span>2026</span></div>
+      <div class="content">
+        <div class="process-card">
+          <div class="process-row"><b>01</b><span>Foto de referência</span></div>
+          <div class="process-row"><b>02</b><span>Cenário escolhido</span></div>
+          <div class="process-row"><b>03</b><span>Direção visual da Lumina</span></div>
+        </div>
+        <div class="tag">Passo 3</div>
+        <h2 class="title">A Lumina cria as imagens com IA</h2>
+        <p class="body">A partir da foto e do cenário escolhido, a Lumina monta o ensaio com estética de revista e acabamento visual pensado para aniversário.</p>
+      </div>
+      <div class="progress"><div class="track"><div class="fill" style="width:71.4%"></div></div><div class="num">5/7</div></div>
+    </section>
+
+    <section class="slide gradient" id="slide-6">
+      <div class="accent"></div>
+      <div class="brand"><span class="mark"><span class="logo-badge"><img src="assets/logo.png" alt="Logo Estúdio Lumina"></span>@estudiolumina67</span><span>2026</span></div>
+      <div class="content">
+        <div class="phone">
+          <div class="phone-top">WhatsApp · Estúdio Lumina</div>
+          <div class="bubble received">Seu ensaio ficou pronto. Posso te mandar as prévias?</div>
+          <div class="bubble sent">Pode mandar, estou ansiosa.</div>
+          <div class="bubble received">Enviei aqui. As fotos finais já estão prontas para salvar e postar.</div>
+        </div>
+        <div class="tag">Passo 4</div>
+        <h2 class="title">As fotos chegam <em>prontas</em></h2>
+        <p class="body">As imagens finais são entregues pelo WhatsApp, prontas para salvar, postar, enviar para a família ou guardar como lembrança da data.</p>
+      </div>
+      <div class="progress"><div class="track"><div class="fill" style="width:85.68%"></div></div><div class="num">6/7</div></div>
+    </section>
+
+    <section class="slide light" id="slide-7">
+      <div class="accent"></div>
+      <div class="brand"><span class="mark"><span class="logo-badge"><img src="assets/logo.png" alt="Logo Estúdio Lumina"></span>@estudiolumina67</span><span>2026</span></div>
+      <div class="content">
+        <p class="body">O processo é simples: uma foto de referência, um cenário escolhido e um ensaio criado para marcar o aniversário.</p>
+        <div class="cta-box">
+          <div class="cta-label">Para começar</div>
+          <div class="cta-main">Chama no WhatsApp e manda sua foto.</div>
+        </div>
+      </div>
+      <div class="progress"><div class="track"><div class="fill" style="width:100%"></div></div><div class="num">7/7</div></div>
+    </section>
+  </main>
+</body>
+</html>

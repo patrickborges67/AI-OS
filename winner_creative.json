@@ -1,0 +1,242 @@
+{
+  "object_story_spec": {
+    "page_id": "1075178832353494",
+    "instagram_user_id": "17841443954905257"
+  },
+  "asset_feed_spec": {
+    "images": [
+      {
+        "adlabels": [
+          {
+            "name": "placement_asset_fd7a2844b89770974_1779324080719",
+            "id": "120241895390040540"
+          }
+        ],
+        "hash": "5c215a69102b1e71cff1e6761be111b0"
+      },
+      {
+        "adlabels": [
+          {
+            "name": "placement_asset_f66601df255bb3c04_1779324117408",
+            "id": "120241895390060540"
+          }
+        ],
+        "hash": "f780c6ba7684348f6159b658ba6b3b8b"
+      },
+      {
+        "adlabels": [
+          {
+            "name": "placement_asset_fc4c41b8d3a02e795_1779324117410",
+            "id": "120241895390050540"
+          }
+        ],
+        "hash": "14926e9a1569576d36cfa2ce5943d6f6"
+      }
+    ],
+    "bodies": [
+      {
+        "adlabels": [
+          {
+            "name": "placement_asset_fe829863166926676_1779324080722",
+            "id": "120241895389990540"
+          },
+          {
+            "name": "placement_asset_f4813d2f397ab0015_1779324080728",
+            "id": "120241895390000540"
+          },
+          {
+            "name": "placement_asset_fd853f36c5190ec34_1779324117411",
+            "id": "120241895390010540"
+          },
+          {
+            "name": "placement_asset_f84b8785b58be164b_1779324080726",
+            "id": "120241895390020540"
+          },
+          {
+            "name": "placement_asset_fb7cb9077779c72c1_1779324117410",
+            "id": "120241895390030540"
+          }
+        ],
+        "text": "Essa foto foi feita a partir de uma imagem de celular.\n\n10 fotos. R$24,90.\n\nSem fotógrafo. Sem estúdio. Sem produção.\n\nO Estúdio Lumina usa IA para transformar qualquer foto sua em\nensaio de aniversário profissional — você manda uma foto,\na gente entrega o ensaio.\n\n👇 Vê como fica com a sua foto."
+      }
+    ],
+    "call_to_action_types": [
+      "WHATSAPP_MESSAGE"
+    ],
+    "call_to_actions": [
+      {
+        "type": "WHATSAPP_MESSAGE",
+        "value": {
+          "app_destination": "WHATSAPP"
+        }
+      }
+    ],
+    "descriptions": [
+      {
+        "text": ""
+      }
+    ],
+    "link_urls": [
+      {
+        "adlabels": [
+          {
+            "name": "placement_asset_ff71f5b59fd47b385_1779324080725",
+            "id": "120241895389940540"
+          },
+          {
+            "name": "placement_asset_fc6c55556360b15a3_1779324080726",
+            "id": "120241895389950540"
+          },
+          {
+            "name": "placement_asset_f497ef12299f98bee_1779324117410",
+            "id": "120241895389960540"
+          },
+          {
+            "name": "placement_asset_f37ccf6bc506996a7_1779324117412",
+            "id": "120241895389970540"
+          },
+          {
+            "name": "placement_asset_f8ed7778fe717989e_1779324080728",
+            "id": "120241895389980540"
+          }
+        ],
+        "website_url": "https://api.whatsapp.com/send",
+        "display_url": ""
+      }
+    ],
+    "titles": [
+      {
+        "adlabels": [
+          {
+            "name": "placement_asset_f1049a6e0b8447087_1779324080726",
+            "id": "120241895389890540"
+          },
+          {
+            "name": "placement_asset_f0c77bfbd1e8c9e4d_1779324080728",
+            "id": "120241895389900540"
+          },
+          {
+            "name": "placement_asset_f236adeec6bcd0a17_1779324117412",
+            "id": "120241895389910540"
+          },
+          {
+            "name": "placement_asset_ff257cd0ff2a1ac03_1779324080724",
+            "id": "120241895389920540"
+          },
+          {
+            "name": "placement_asset_f07dfe7adc9239c50_1779324117410",
+            "id": "120241895389930540"
+          }
+        ],
+        "text": "Do celular para o ensaio. Apenas R$24,90."
+      }
+    ],
+    "ad_formats": [
+      "AUTOMATIC_FORMAT"
+    ],
+    "asset_customization_rules": [
+      {
+        "customization_spec": {
+          "age_max": 65,
+          "age_min": 13,
+          "publisher_platforms": [
+            "facebook",
+            "instagram",
+            "audience_network",
+            "whatsapp"
+          ],
+          "facebook_positions": [
+            "facebook_reels",
+            "instream_video",
+            "story"
+          ],
+          "instagram_positions": [
+            "story",
+            "reels"
+          ],
+          "audience_network_positions": [
+            "classic"
+          ]
+        },
+        "image_label": {
+          "name": "placement_asset_f66601df255bb3c04_1779324117408",
+          "id": "120241895390060540"
+        },
+        "body_label": {
+          "name": "placement_asset_fb7cb9077779c72c1_1779324117410",
+          "id": "120241895390030540"
+        },
+        "link_url_label": {
+          "name": "placement_asset_f497ef12299f98bee_1779324117410",
+          "id": "120241895389960540"
+        },
+        "title_label": {
+          "name": "placement_asset_f07dfe7adc9239c50_1779324117410",
+          "id": "120241895389930540"
+        },
+        "priority": 1
+      },
+      {
+        "customization_spec": {
+          "age_max": 65,
+          "age_min": 13,
+          "publisher_platforms": [
+            "facebook"
+          ],
+          "facebook_positions": [
+            "search"
+          ]
+        },
+        "image_label": {
+          "name": "placement_asset_fc4c41b8d3a02e795_1779324117410",
+          "id": "120241895390050540"
+        },
+        "body_label": {
+          "name": "placement_asset_fd853f36c5190ec34_1779324117411",
+          "id": "120241895390010540"
+        },
+        "link_url_label": {
+          "name": "placement_asset_f37ccf6bc506996a7_1779324117412",
+          "id": "120241895389970540"
+        },
+        "title_label": {
+          "name": "placement_asset_f236adeec6bcd0a17_1779324117412",
+          "id": "120241895389910540"
+        },
+        "priority": 2
+      },
+      {
+        "customization_spec": {
+          "age_max": 65,
+          "age_min": 13
+        },
+        "image_label": {
+          "name": "placement_asset_fd7a2844b89770974_1779324080719",
+          "id": "120241895390040540"
+        },
+        "body_label": {
+          "name": "placement_asset_fe829863166926676_1779324080722",
+          "id": "120241895389990540"
+        },
+        "link_url_label": {
+          "name": "placement_asset_ff71f5b59fd47b385_1779324080725",
+          "id": "120241895389940540"
+        },
+        "title_label": {
+          "name": "placement_asset_ff257cd0ff2a1ac03_1779324080724",
+          "id": "120241895389920540"
+        },
+        "priority": 3
+      }
+    ],
+    "optimization_type": "PLACEMENT",
+    "additional_data": {
+      "multi_share_end_card": false,
+      "page_welcome_message": "{\"type\":\"VISUAL_EDITOR\",\"version\":2,\"landing_screen_type\":\"welcome_message\",\"media_type\":\"text\",\"text_format\":{\"customer_action_type\":\"autofill_message\",\"message\":{\"autofill_message\":{\"content\":\"Olá! Tenho interesse e queria mais informações, por favor.\"},\"text\":\"Oi! Como podemos ajudar?\"}},\"image_format\":{\"customer_action_type\":\"quick_replies\",\"message\":{\"attachment\":{\"type\":\"template\",\"payload\":{\"template_type\":\"generic\",\"elements\":[{\"title\":\"\",\"buttons\":[],\"image_hash\":\"\"}]}},\"quick_replies\":[{\"title\":\"Gostaria de obter mais informações\",\"content_type\":\"text\",\"response_type\":null}],\"text\":\"Oi! Como podemos ajudar?\"}},\"video_format\":{\"customer_action_type\":\"quick_replies\",\"message\":{\"attachment\":{\"type\":\"video\",\"payload\":{\"attachment_id\":\"\"}},\"quick_replies\":[{\"title\":\"Gostaria de obter mais informações\",\"content_type\":\"text\",\"response_type\":null}],\"text\":\"Oi! Como podemos ajudar?\"}},\"ai_generated_icebreaker_toggle_enabled\":null,\"user_edit\":false,\"surface\":\"visual_editor_new\"}",
+      "is_click_to_message": false
+    },
+    "reasons_to_shop": false,
+    "shops_bundle": false
+  },
+  "id": "1673999900783347"
+}

@@ -1,0 +1,571 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Estúdio Lumina — Ensaio de casal com IA (Dia dos Namorados)</title>
+  <style>
+    :root {
+      --black: #000000;
+      --dark: #070604;
+      --gold: #C9A050;
+      --gold-light: #E2B96A;
+      --gold-dark: #8B6520;
+      --off: #F5F0E8;
+      --muted: rgba(245, 240, 232, 0.68);
+      --ink: #16120C;
+      --paper: #F5F0E8;
+      --line: rgba(201, 160, 80, 0.24);
+      --grad: linear-gradient(135deg, #E2B96A 0%, #C9A050 45%, #8B6520 100%);
+      --serif: "Cormorant Garamond", "Playfair Display", Georgia, serif;
+      --sans: "Inter", "Plus Jakarta Sans", Arial, sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+    body { margin: 0; background: #111; color: var(--off); font-family: var(--sans); }
+
+    .toolbar {
+      position: sticky; top: 0; z-index: 100;
+      display: flex; gap: 12px; justify-content: center;
+      padding: 14px; background: rgba(0,0,0,0.82);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+    .toolbar button {
+      border: 1px solid rgba(226,185,106,0.45);
+      background: rgba(226,185,106,0.12);
+      color: var(--off); padding: 10px 16px;
+      border-radius: 4px; font-size: 13px;
+      letter-spacing: 0.08em; text-transform: uppercase; cursor: pointer;
+    }
+
+    .deck { display: flex; flex-direction: column; align-items: center; gap: 28px; padding: 28px 0 56px; }
+    body.preview .deck { display: grid; grid-template-columns: repeat(auto-fit, 324px); justify-content: center; align-items: start; gap: 18px; padding: 26px; }
+    body.preview .slide { transform: scale(0.30); transform-origin: top left; margin-right: -756px; margin-bottom: -945px; }
+
+    .slide { width: 1080px; height: 1350px; position: relative; overflow: hidden; background: var(--dark); flex: 0 0 auto; }
+
+    .accent { position: absolute; inset: 0 0 auto; height: 8px; background: var(--grad); z-index: 30; }
+
+    .brand {
+      position: absolute; top: 38px; left: 56px; right: 56px;
+      display: flex; justify-content: space-between; align-items: center;
+      z-index: 20; font-size: 14px; font-weight: 600;
+      letter-spacing: 0.16em; text-transform: uppercase;
+      color: rgba(245,240,232,0.52);
+    }
+    .slide.light .brand { color: rgba(22,18,12,0.42); }
+
+    .mark { display: inline-flex; align-items: center; gap: 12px; }
+    .logo-badge { width: 42px; height: 42px; border-radius: 50%; border: 1px solid rgba(226,185,106,0.42); background: #000; overflow: hidden; display: block; }
+    .logo-badge img { width: 100%; height: 100%; object-fit: cover; transform: scale(1.16); }
+
+    .progress { position: absolute; left: 56px; right: 56px; bottom: 34px; display: flex; align-items: center; gap: 16px; z-index: 25; }
+    .track { height: 3px; flex: 1; border-radius: 99px; overflow: hidden; background: rgba(255,255,255,0.12); }
+    .light .track { background: rgba(22,18,12,0.1); }
+    .fill { height: 100%; background: var(--gold-light); }
+    .num { width: 34px; text-align: right; color: rgba(245,240,232,0.34); font-size: 14px; font-weight: 600; }
+    .light .num { color: rgba(22,18,12,0.28); }
+
+    .content {
+      position: absolute; left: 56px; right: 56px; top: 118px; bottom: 90px;
+      z-index: 10; display: flex; flex-direction: column;
+      justify-content: flex-end; padding-bottom: 46px;
+    }
+
+    .tag {
+      font-size: 13px; font-weight: 700;
+      letter-spacing: 0.24em; text-transform: uppercase;
+      color: var(--gold-light); margin-bottom: 26px;
+    }
+
+    h1, h2, p { margin: 0; }
+
+    .headline {
+      font-family: var(--serif);
+      font-size: 88px; line-height: 0.94; letter-spacing: 0;
+      text-transform: uppercase; color: #fff;
+      font-weight: 700; max-width: 900px;
+    }
+    .headline em, .title em { color: var(--gold-light); font-style: normal; }
+
+    .title {
+      font-family: var(--serif);
+      font-size: 74px; line-height: 0.98; letter-spacing: 0;
+      text-transform: uppercase; color: #fff;
+      font-weight: 700; margin-bottom: 34px;
+    }
+    .light .title { color: var(--ink); }
+
+    .body {
+      font-size: 38px; line-height: 1.43; color: var(--muted);
+      max-width: 900px; font-weight: 400;
+    }
+    .body strong { color: #fff; font-weight: 700; }
+    .light .body { color: rgba(22,18,12,0.62); }
+    .light .body strong { color: var(--ink); }
+
+    /* === SLIDE 1 — CAPA === */
+    .cover-bg {
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(circle at 70% 18%, rgba(226,185,106,0.18), transparent 30%),
+        linear-gradient(160deg, #000 0%, #090806 52%, #171006 100%);
+    }
+    .cover::after {
+      content: ""; position: absolute; inset: 0;
+      background: linear-gradient(to bottom, rgba(0,0,0,0.02) 0%, rgba(0,0,0,0.25) 54%, rgba(0,0,0,0.92) 100%);
+      z-index: 1;
+    }
+    .cover-photo {
+      position: absolute; inset: 0; width: auto; height: auto;
+      overflow: hidden; z-index: 2; background: #000;
+    }
+    .cover-photo img {
+      width: 100%; height: 100%; object-fit: cover; object-position: center;
+      display: block; background: #000; opacity: 0.92;
+    }
+    .cover .cover-photo::before {
+      content: ""; position: absolute; inset: 0;
+      background:
+        radial-gradient(circle at 62% 24%, rgba(226,185,106,0.12), transparent 30%),
+        linear-gradient(to bottom, rgba(0,0,0,0.20) 0%, rgba(0,0,0,0.08) 32%, rgba(0,0,0,0.52) 62%, rgba(0,0,0,0.96) 100%);
+      z-index: 1; pointer-events: none;
+    }
+    .cover .content { z-index: 2; bottom: 86px; }
+    .cover .tag {
+      display: inline-flex; align-items: center; width: fit-content;
+      padding: 12px 20px; border: 1px solid rgba(226,185,106,0.42);
+      background: rgba(0,0,0,0.38); backdrop-filter: blur(8px);
+      border-radius: 4px; margin-bottom: 30px;
+    }
+
+    /* === SLIDE 2 e 4 — foto wide 16:9 (igual carrossel de aniversário) === */
+    .wide-photo {
+      width: 100%; height: 540px;
+      border: 1px solid rgba(226,185,106,0.28);
+      background: #050505; overflow: hidden;
+      margin-bottom: 44px; position: relative;
+      box-shadow: 0 30px 90px rgba(0,0,0,0.35);
+    }
+    .wide-photo img {
+      width: 100%; height: 100%; object-fit: cover; object-position: center; display: block;
+    }
+    .wide-photo.top img { object-position: center top; }
+    .wide-photo::after {
+      content: ""; position: absolute; inset: 0;
+      background: linear-gradient(to bottom, rgba(0,0,0,0.02), rgba(0,0,0,0.16));
+      pointer-events: none;
+    }
+    .proof-caption-row {
+      position: absolute; left: 22px; right: 22px; bottom: 22px;
+      display: flex; justify-content: space-between; gap: 16px;
+    }
+    .proof-pill {
+      padding: 11px 16px; background: rgba(0,0,0,0.68);
+      border: 1px solid rgba(255,255,255,0.15); color: #fff;
+      font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase;
+    }
+
+    /* === SLIDE 3 — duas selfies polaroide === */
+    .light {
+      background:
+        radial-gradient(circle at 88% 10%, rgba(226,185,106,0.18), transparent 34%),
+        var(--paper);
+    }
+    .selfies-row {
+      display: flex; justify-content: center; align-items: center;
+      gap: 36px; margin-bottom: 44px;
+      position: relative;
+    }
+    .polaroid {
+      width: 320px; padding: 18px 18px 56px;
+      background: #fff;
+      box-shadow: 0 22px 60px rgba(0,0,0,0.18);
+      border: 1px solid rgba(0,0,0,0.04);
+    }
+    .polaroid:first-child { transform: rotate(-4deg); }
+    .polaroid:last-child { transform: rotate(3deg); }
+    .polaroid .photo {
+      width: 100%; aspect-ratio: 1 / 1;
+      background-size: cover; background-position: center;
+      background-color: #ddd;
+      overflow: hidden; position: relative;
+    }
+    .polaroid .label {
+      text-align: center;
+      margin-top: 14px;
+      color: rgba(22,18,12,0.48);
+      font-family: var(--serif);
+      font-size: 22px; font-style: italic;
+      letter-spacing: 0.02em;
+    }
+    .or-divider {
+      position: absolute; left: 50%; bottom: -42px;
+      transform: translateX(-50%);
+      color: var(--gold-dark);
+      font-family: var(--serif); font-style: italic;
+      font-size: 22px; letter-spacing: 0.16em;
+      text-transform: uppercase;
+      background: var(--paper); padding: 4px 14px;
+    }
+    .selfies-note {
+      text-align: center; margin: 60px auto 36px;
+      color: rgba(22,18,12,0.52);
+      font-family: var(--serif); font-style: italic;
+      font-size: 26px; max-width: 760px;
+    }
+
+    /* === SLIDE 4 — quatro cenários === */
+    .scenario-grid-tags {
+      display: grid; grid-template-columns: repeat(2, 1fr);
+      gap: 14px; margin-bottom: 42px;
+    }
+    .scenario-tag {
+      border: 1px solid rgba(226,185,106,0.32);
+      background: rgba(255,255,255,0.045);
+      border-radius: 6px;
+      padding: 22px 26px;
+      display: flex; align-items: center;
+      color: var(--gold-light);
+      font-family: var(--serif);
+      font-size: 32px; line-height: 1;
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+    }
+    .scenario-tag::before {
+      content: "✦"; margin-right: 16px; opacity: 0.6;
+    }
+
+    /* === SLIDE 5 — process-card === */
+    .process-card {
+      border-left: 7px solid var(--gold);
+      background: #fff;
+      border-radius: 8px;
+      padding: 48px 52px;
+      margin-bottom: 42px;
+      box-shadow: 0 22px 70px rgba(0,0,0,0.08);
+    }
+    .process-row {
+      display: flex; gap: 22px; align-items: flex-start;
+      color: rgba(22,18,12,0.68);
+      font-size: 31px; line-height: 1.35;
+      margin-bottom: 20px;
+    }
+    .process-row:last-child { margin-bottom: 0; }
+    .process-row b {
+      color: var(--gold-dark);
+      font-size: 24px; line-height: 1.8;
+      min-width: 34px;
+    }
+
+    /* === SLIDE 6 — phone WhatsApp === */
+    .gradient {
+      background:
+        radial-gradient(circle at 82% 14%, rgba(255,255,255,0.18), transparent 34%),
+        linear-gradient(150deg, #000 0%, #171006 38%, #8B6520 100%);
+    }
+    .phone {
+      width: 560px;
+      border-radius: 46px;
+      background: #0f0f0f;
+      border: 8px solid #222;
+      padding: 38px 30px;
+      box-shadow: 0 36px 90px rgba(0,0,0,0.35);
+      margin: 40px auto 44px;
+    }
+    .phone-top {
+      color: rgba(255,255,255,0.58);
+      text-align: center;
+      font-size: 18px; letter-spacing: 0.08em; text-transform: uppercase;
+      padding-bottom: 22px; margin-bottom: 22px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+    .bubble {
+      width: fit-content; max-width: 430px;
+      padding: 18px 22px;
+      border-radius: 22px;
+      font-size: 25px; line-height: 1.24;
+      margin-bottom: 16px;
+      color: #f8f8f8; background: #232323;
+    }
+    .bubble.sent { margin-left: auto; background: #1f7f4c; color: #fff; }
+    .bubble.received { margin-right: auto; background: linear-gradient(135deg, #C9A050, #8B6520); color: #fff; }
+    .bubble.media {
+      padding: 8px; background: #232323;
+      max-width: 280px; margin-right: auto;
+    }
+    .bubble.media img {
+      width: 100%; height: 240px; object-fit: cover;
+      object-position: center top;
+      border-radius: 14px; display: block;
+    }
+    .bubble.media .media-caption {
+      font-size: 16px; color: rgba(255,255,255,0.68);
+      padding: 8px 6px 4px; letter-spacing: 0.04em;
+    }
+
+    /* === SLIDE 7 — por quê é presente === */
+    .vs-grid {
+      display: grid; grid-template-columns: 1fr 1.2fr;
+      gap: 28px; align-items: stretch;
+      margin-bottom: 38px;
+    }
+    .vs-card {
+      border-radius: 8px;
+      padding: 36px 32px;
+      min-height: 360px;
+      display: flex; flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+    }
+    .vs-card.obvious {
+      background: rgba(0,0,0,0.04);
+      border: 1px dashed rgba(22,18,12,0.18);
+      color: rgba(22,18,12,0.42);
+    }
+    .vs-card.obvious .vs-label {
+      font-size: 14px; letter-spacing: 0.2em;
+      text-transform: uppercase; font-weight: 700;
+      margin-bottom: 22px;
+    }
+    .vs-card.obvious ul {
+      list-style: none; padding: 0; margin: 0;
+      font-family: var(--serif);
+      font-size: 30px; line-height: 1.5;
+    }
+    .vs-card.obvious li {
+      text-decoration: line-through;
+      text-decoration-color: rgba(22,18,12,0.32);
+      margin-bottom: 8px;
+    }
+    .vs-card.special {
+      background: linear-gradient(140deg, #1a1208 0%, #2b1d0a 100%);
+      border: 1px solid rgba(226,185,106,0.34);
+      color: var(--off);
+      box-shadow: 0 24px 70px rgba(0,0,0,0.18);
+    }
+    .vs-card.special .vs-label {
+      font-size: 14px; letter-spacing: 0.2em;
+      text-transform: uppercase; font-weight: 700;
+      color: var(--gold-light);
+      margin-bottom: 22px;
+    }
+    .vs-card.special .vs-headline {
+      font-family: var(--serif);
+      font-size: 44px; line-height: 1.04;
+      color: #fff;
+    }
+    .vs-card.special .vs-headline em {
+      color: var(--gold-light); font-style: normal;
+    }
+
+    /* === SLIDE 8 — CTA === */
+    .cta-box {
+      background: #fff;
+      border: 2px solid rgba(201,160,80,0.22);
+      border-radius: 8px;
+      padding: 46px 50px;
+      margin-top: 44px;
+    }
+    .cta-label {
+      color: rgba(22,18,12,0.48);
+      font-size: 18px; letter-spacing: 0.14em; text-transform: uppercase;
+      margin-bottom: 18px; font-weight: 700;
+    }
+    .cta-main {
+      font-family: var(--serif);
+      color: var(--gold-dark);
+      font-size: 62px; line-height: 0.98;
+      text-transform: uppercase; font-weight: 700;
+    }
+  </style>
+</head>
+<body class="preview">
+  <div class="toolbar">
+    <button onclick="document.body.classList.toggle('preview')">Alternar preview / tamanho real</button>
+  </div>
+
+  <main class="deck">
+
+    <!-- ============ SLIDE 1 — CAPA ============ -->
+    <section class="slide cover" id="slide-1">
+      <div class="cover-bg"></div>
+      <div class="cover-photo"><img src="assets/slide1-capa-final.png" alt="Casal em ensaio romântico ao pôr do sol"></div>
+      <div class="accent"></div>
+      <div class="brand">
+        <span class="mark"><span class="logo-badge"><img src="assets/logo.png" alt="Logo Estúdio Lumina"></span>@estudiolumina67</span>
+        <span>2026</span>
+      </div>
+      <div class="content">
+        <div class="tag">Ensaio de casal com IA</div>
+        <h1 class="headline">Um ensaio do casal a partir de <em>duas selfies</em>.</h1>
+      </div>
+      <div class="progress"><div class="track"><div class="fill" style="width:12.5%"></div></div><div class="num">1/8</div></div>
+    </section>
+
+    <!-- ============ SLIDE 2 — A TRANSFORMAÇÃO ============ -->
+    <section class="slide" id="slide-2">
+      <div class="accent"></div>
+      <div class="brand">
+        <span class="mark"><span class="logo-badge"><img src="assets/logo.png" alt="Logo Estúdio Lumina"></span>@estudiolumina67</span>
+        <span>2026</span>
+      </div>
+      <div class="content">
+        <div class="wide-photo">
+          <img src="assets/slide 2 16.9.png" alt="Antes e depois — duas selfies viram um ensaio romântico">
+          <div class="proof-caption-row">
+            <div class="proof-pill">fotos enviadas</div>
+            <div class="proof-pill">ensaio final</div>
+          </div>
+        </div>
+        <div class="tag">O resultado</div>
+        <h2 class="title">Parece produção de <em>estúdio</em></h2>
+        <p class="body">O ensaio final tem cenário, luz e composição de um editorial de revista. Só que o processo começa com duas fotos comuns enviadas pelo celular.</p>
+      </div>
+      <div class="progress"><div class="track"><div class="fill" style="width:25%"></div></div><div class="num">2/8</div></div>
+    </section>
+
+    <!-- ============ SLIDE 3 — DUAS SELFIES (slide-chave) ============ -->
+    <section class="slide light" id="slide-3">
+      <div class="accent"></div>
+      <div class="brand">
+        <span class="mark"><span class="logo-badge"><img src="assets/logo.png" alt="Logo Estúdio Lumina"></span>@estudiolumina67</span>
+        <span>2026</span>
+      </div>
+      <div class="content">
+        <div class="selfies-row">
+          <div class="polaroid">
+            <div class="photo" style="background-image:url('assets/slide3-selfie-ela.png');"></div>
+            <div class="label">selfie dela</div>
+          </div>
+          <div class="polaroid">
+            <div class="photo" style="background-image:url('assets/slide3-selfie-ele.png');"></div>
+            <div class="label">selfie dele</div>
+          </div>
+        </div>
+        <p class="selfies-note">— ou uma foto dos dois juntos onde dê pra ver bem os dois rostos —</p>
+        <div class="tag">Passo 1</div>
+        <h2 class="title">Mandem uma foto do <em>rosto</em> de cada um</h2>
+        <p class="body">As fotos servem como referência pra preservar a identidade do casal nas imagens finais. Pode ser uma selfie de cada, ou uma foto dos dois juntos.</p>
+      </div>
+      <div class="progress"><div class="track"><div class="fill" style="width:37.5%"></div></div><div class="num">3/8</div></div>
+    </section>
+
+    <!-- ============ SLIDE 4 — CENÁRIO ============ -->
+    <section class="slide" id="slide-4">
+      <div class="accent"></div>
+      <div class="brand">
+        <span class="mark"><span class="logo-badge"><img src="assets/logo.png" alt="Logo Estúdio Lumina"></span>@estudiolumina67</span>
+        <span>2026</span>
+      </div>
+      <div class="content">
+        <div class="wide-photo">
+          <img src="assets/slide 4 16.9.png" alt="Quatro cenários românticos: Paris, praia, jantar, campo">
+          <div class="proof-caption-row">
+            <div class="proof-pill">cenários</div>
+            <div class="proof-pill">dia dos namorados</div>
+          </div>
+        </div>
+        <div class="tag">Passo 2</div>
+        <h2 class="title">Escolham o clima do <em>ensaio</em></h2>
+        <p class="body">Paris, praia ao pôr do sol, jantar luxuoso, cena de filme ou pôr do sol no campo. O clima escolhido define a história que as fotos vão contar.</p>
+      </div>
+      <div class="progress"><div class="track"><div class="fill" style="width:50%"></div></div><div class="num">4/8</div></div>
+    </section>
+
+    <!-- ============ SLIDE 5 — CRIAÇÃO ============ -->
+    <section class="slide light" id="slide-5">
+      <div class="accent"></div>
+      <div class="brand">
+        <span class="mark"><span class="logo-badge"><img src="assets/logo.png" alt="Logo Estúdio Lumina"></span>@estudiolumina67</span>
+        <span>2026</span>
+      </div>
+      <div class="content">
+        <div class="process-card">
+          <div class="process-row"><b>01</b><span>Fotos de referência do casal</span></div>
+          <div class="process-row"><b>02</b><span>Clima escolhido por vocês</span></div>
+          <div class="process-row"><b>03</b><span>Direção visual da Lumina</span></div>
+        </div>
+        <div class="tag">Passo 3</div>
+        <h2 class="title">A Lumina cria as imagens com <em>IA</em></h2>
+        <p class="body">A partir das fotos de vocês e do clima escolhido, a Lumina monta o ensaio com estética cinematográfica e acabamento de revista.</p>
+      </div>
+      <div class="progress"><div class="track"><div class="fill" style="width:62.5%"></div></div><div class="num">5/8</div></div>
+    </section>
+
+    <!-- ============ SLIDE 6 — ENTREGA ============ -->
+    <section class="slide gradient" id="slide-6">
+      <div class="accent"></div>
+      <div class="brand">
+        <span class="mark"><span class="logo-badge"><img src="assets/logo.png" alt="Logo Estúdio Lumina"></span>@estudiolumina67</span>
+        <span>2026</span>
+      </div>
+      <div class="content">
+        <div class="phone">
+          <div class="phone-top">WhatsApp · Estúdio Lumina</div>
+          <div class="bubble received">O ensaio de vocês ficou pronto 💛</div>
+          <div class="bubble media">
+            <img src="assets/slide2-antesdepois-final.png" alt="Prévia do ensaio entregue">
+            <div class="media-caption">prévia do ensaio</div>
+          </div>
+          <div class="bubble sent">Ficou perfeito, amei demais!</div>
+          <div class="bubble received">Tô enviando as fotos finais aqui 🤍</div>
+        </div>
+        <div class="tag">Passo 4</div>
+        <h2 class="title">As fotos chegam <em>prontas</em></h2>
+        <p class="body">As imagens finais são entregues pelo WhatsApp, prontas pra dar de presente, postar nos stories ou guardar como lembrança da data.</p>
+      </div>
+      <div class="progress"><div class="track"><div class="fill" style="width:75%"></div></div><div class="num">6/8</div></div>
+    </section>
+
+    <!-- ============ SLIDE 7 — POR QUE É PRESENTE ============ -->
+    <section class="slide light" id="slide-7">
+      <div class="accent"></div>
+      <div class="brand">
+        <span class="mark"><span class="logo-badge"><img src="assets/logo.png" alt="Logo Estúdio Lumina"></span>@estudiolumina67</span>
+        <span>2026</span>
+      </div>
+      <div class="content">
+        <div class="vs-grid">
+          <div class="vs-card obvious">
+            <div class="vs-label">o óbvio</div>
+            <ul>
+              <li>caneca</li>
+              <li>chocolate</li>
+              <li>perfume</li>
+              <li>flor</li>
+            </ul>
+          </div>
+          <div class="vs-card special">
+            <div class="vs-label">o que ninguém faz</div>
+            <div class="vs-headline">Um <em>ensaio de vocês dois</em> que ele vai querer mostrar pra todo mundo.</div>
+          </div>
+        </div>
+        <div class="tag">Por que funciona</div>
+        <h2 class="title">Um presente que ele <em>não está esperando</em></h2>
+        <p class="body">Foge do óbvio. É emocional, criativo, e cabe num orçamento bem menor que um ensaio fotográfico tradicional de casal.</p>
+      </div>
+      <div class="progress"><div class="track"><div class="fill" style="width:87.5%"></div></div><div class="num">7/8</div></div>
+    </section>
+
+    <!-- ============ SLIDE 8 — CTA ============ -->
+    <section class="slide light" id="slide-8">
+      <div class="accent"></div>
+      <div class="brand">
+        <span class="mark"><span class="logo-badge"><img src="assets/logo.png" alt="Logo Estúdio Lumina"></span>@estudiolumina67</span>
+        <span>2026</span>
+      </div>
+      <div class="content">
+        <p class="body">O processo é simples: duas fotos de referência, um clima escolhido e um ensaio criado pra marcar a data.</p>
+        <div class="cta-box">
+          <div class="cta-label">Para começar</div>
+          <div class="cta-main">Chama no WhatsApp e envie suas fotos.</div>
+        </div>
+      </div>
+      <div class="progress"><div class="track"><div class="fill" style="width:100%"></div></div><div class="num">8/8</div></div>
+    </section>
+
+  </main>
+</body>
+</html>

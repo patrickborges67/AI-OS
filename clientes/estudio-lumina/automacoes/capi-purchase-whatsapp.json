@@ -1,0 +1,80 @@
+{
+  "name": "Estudio Lumina - CAPI Purchase",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "lumina-capi-purchase",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "webhook-node",
+      "name": "Webhook - Venda Confirmada",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [240, 300],
+      "webhookId": "lumina-capi-purchase"
+    },
+    {
+      "parameters": {
+        "jsCode": "const body = $input.first().json.body || $input.first().json;\n\n// Normaliza telefone: aceita qualquer formato e padroniza pra 5567XXXXXXXXX\nconst rawPhone = String(body.phone || '').replace(/\\D/g, '');\nconst phone = rawPhone.startsWith('55') ? rawPhone : '55' + rawPhone;\n\n// Gera SHA256 do telefone\nconst crypto = require('crypto');\nconst phoneHash = crypto.createHash('sha256').update(phone).digest('hex');\n\n// SHA256 do email (se vier)\nlet emailHash = null;\nif (body.email) {\n  emailHash = crypto.createHash('sha256').update(body.email.toLowerCase().trim()).digest('hex');\n}\n\n// SHA256 do nome (se vier)\nlet fnHash = null;\nif (body.first_name) {\n  fnHash = crypto.createHash('sha256').update(body.first_name.toLowerCase().trim()).digest('hex');\n}\n\n// event_id único para deduplicação\nconst eventId = body.event_id || `lumina_${Date.now()}_${Math.random().toString(36).slice(2,8)}`;\n\nreturn [{\n  json: {\n    phone_hash: phoneHash,\n    email_hash: emailHash,\n    fn_hash: fnHash,\n    event_id: eventId,\n    value: body.value || 29.00,\n    currency: body.currency || 'BRL',\n    content_name: body.content_name || 'Ensaio Fotografico IA',\n    event_time: Math.floor(Date.now() / 1000)\n  }\n}];"
+      },
+      "id": "code-node",
+      "name": "Prepara Dados CAPI",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [460, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://graph.facebook.com/v21.0/871404632654375/events",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "access_token",
+              "value": "={{ $env.META_ADS_TOKEN }}"
+            },
+            {
+              "name": "data",
+              "value": "={{ JSON.stringify([{ event_name: 'Purchase', event_time: $json.event_time, event_id: $json.event_id, action_source: 'other', user_data: { ph: [$json.phone_hash], ...$json.email_hash && { em: [$json.email_hash] }, ...$json.fn_hash && { fn: [$json.fn_hash] } }, custom_data: { value: $json.value, currency: $json.currency, content_name: $json.content_name } }]) }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "http-node",
+      "name": "Envia CAPI para Meta",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [680, 300]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { ok: true, events_received: $json.events_received, event_id: $('Prepara Dados CAPI').first().json.event_id } }}",
+        "options": {}
+      },
+      "id": "response-node",
+      "name": "Resposta",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [900, 300]
+    }
+  ],
+  "connections": {
+    "Webhook - Venda Confirmada": {
+      "main": [[{ "node": "Prepara Dados CAPI", "type": "main", "index": 0 }]]
+    },
+    "Prepara Dados CAPI": {
+      "main": [[{ "node": "Envia CAPI para Meta", "type": "main", "index": 0 }]]
+    },
+    "Envia CAPI para Meta": {
+      "main": [[{ "node": "Resposta", "type": "main", "index": 0 }]]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  }
+}
