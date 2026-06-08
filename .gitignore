@@ -22,7 +22,6 @@ dados/*.json
 !dados/README.md
 
 # Pastas de trabalho do usuario (geradas pelo /setup, conteudo pessoal)
-clientes/
 propostas/
 conteudo/
 projetos/

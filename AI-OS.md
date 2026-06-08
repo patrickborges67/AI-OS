@@ -120,5 +120,6 @@ Quando o usuário pedir para criar uma nova skill:
 - Antes de mudanças estruturais, explique rapidamente a arquitetura atual e o plano.
 - Nunca mova ou apague pastas existentes sem confirmacao.
 - Não introduza dependências novas sem avisar.
+- Manter Playwright instalado no workspace quando for usado para revisar páginas web, carrosséis ou exports visuais; não remover `node_modules`, `package.json` ou `package-lock.json` nesses casos.
 - Não invente informação de contexto; se não conseguir inferir, pergunte.
 - Ao finalizar uma tarefa, informe resumo das mudanças, arquivos alterados, impacto na arquitetura, riscos ou itens não verificados e próximos passos recomendados.
