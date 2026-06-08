@@ -128,20 +128,43 @@ function readPngSize(filePath) {
 
 async function preparePage(page) {
   await page.evaluate(() => {
+    // Variação 1: applyMode global (alguns templates)
     if (typeof window.applyMode === "function" && "isPreview" in window) {
       window.isPreview = false;
       window.applyMode();
     }
 
+    // Variação 2: classe "preview" no body (padrão do template novo)
+    document.body.classList.remove("preview");
+
+    // Variação 3: atributo data-mode
+    document.body.removeAttribute("data-mode");
+
     document.body.classList.add("full");
   });
 
+  // Reset defensivo: desliga toolbar, anula transform/margens negativas que vêm do modo preview,
+  // garante que cada .slide renderize em 1080x1350 isolado.
   await page.addStyleTag({
     content: `
       .toolbar, .controls { display: none !important; }
-      .slides-wrap { margin: 0 auto !important; padding: 0 !important; display: block !important; max-width: none !important; }
+      body, body.preview { background: #111 !important; }
+      .deck, .slides-wrap {
+        display: block !important;
+        grid-template-columns: none !important;
+        margin: 0 auto !important;
+        padding: 0 !important;
+        max-width: none !important;
+        gap: 0 !important;
+      }
       .slide-frame { margin: 0 auto 28px !important; box-shadow: none !important; }
-      .slide { transform: none !important; }
+      .slide {
+        transform: none !important;
+        margin: 0 auto 28px !important;
+        width: 1080px !important;
+        height: 1350px !important;
+        flex: 0 0 auto !important;
+      }
     `,
   });
 
@@ -151,17 +174,32 @@ async function preparePage(page) {
 
 async function exportSlides(config) {
   const { chromium } = require("playwright");
+  let sharp = null;
+  try { sharp = require("sharp"); } catch { /* sharp opcional — fallback pra 1x */ }
 
   buildInlineHtml(config);
   if (!config.outDir || path.resolve(config.outDir) === path.parse(path.resolve(config.outDir)).root) {
     throw new Error(`Pasta de saida insegura: ${config.outDir}`);
   }
 
-  fs.rmSync(config.outDir, { recursive: true, force: true });
   fs.mkdirSync(config.outDir, { recursive: true });
+  // Limpa só os PNGs antigos (não apaga a pasta — evita EPERM no Windows quando ela
+  // está aberta no Explorer/IDE). Arquivos individuais bloqueados são ignorados.
+  for (const file of fs.readdirSync(config.outDir)) {
+    if (file.toLowerCase().endsWith(".png")) {
+      try { fs.unlinkSync(path.join(config.outDir, file)); } catch { /* arquivo bloqueado, será sobrescrito */ }
+    }
+  }
 
   const browser = await chromium.launch();
-  const page = await browser.newPage({ viewport: { width: 1200, height: 1400 } });
+  // Quando sharp está disponível, faz supersampling 2x: o navegador renderiza em 2x,
+  // captura em 2160x2700 e downscalamos pra 1080x1350 com Lanczos — ganho de nitidez
+  // visível em texto serif e detalhes finos (rostos gerados por IA). Sem sharp, 1x.
+  const scale = sharp ? 2 : 1;
+  const page = await browser.newPage({
+    viewport: { width: 1200, height: 1400 },
+    deviceScaleFactor: scale,
+  });
   await page.goto(pathToFileURL(config.inlinePath).href, { waitUntil: "networkidle" });
   await preparePage(page);
 
@@ -177,7 +215,18 @@ async function exportSlides(config) {
     await slide.scrollIntoViewIfNeeded();
     await page.waitForTimeout(300);
     const outputPath = path.join(config.outDir, `slide_${String(i + 1).padStart(2, "0")}.png`);
-    await slide.screenshot({ path: outputPath });
+
+    if (sharp) {
+      // Captura em 2x na memória e faz downscale Lanczos pra 1080x1350.
+      const buffer = await slide.screenshot();
+      await sharp(buffer)
+        .resize(1080, 1350, { kernel: sharp.kernel.lanczos3 })
+        .png({ compressionLevel: 9 })
+        .toFile(outputPath);
+    } else {
+      await slide.screenshot({ path: outputPath });
+    }
+
     const { width, height } = readPngSize(outputPath);
     if (width !== 1080 || height !== 1350) {
       throw new Error(`Slide ${i + 1} exportado em ${width}x${height}, esperado 1080x1350.`);

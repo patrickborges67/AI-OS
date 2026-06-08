@@ -34,6 +34,12 @@ Carregue apenas os arquivos necessarios para a etapa atual:
 - `references/visual-principles.md`: principios visuais BrandsDecoded.
 - `references/examples.md`: exemplos bons para calibragem.
 
+## Aprendizados (memoria persistente)
+
+Ler `aprendizados.md` (raiz da skill) ANTES de produzir ou exportar carrossel. Contem regras
+acumuladas sobre export (deviceScaleFactor, sharp), reset de modo preview, frames de imagem
+e armadilhas de Windows.
+
 ## Fluxo obrigatorio
 
 1. Briefing criativo: confirme tema, objetivo, publico, promessa, CTA, marca, handle, direcao visual, pasta de saida e quantidade aproximada de slides.

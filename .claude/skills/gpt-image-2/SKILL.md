@@ -75,17 +75,31 @@ Quando houver mais de um asset no mesmo projeto, repetir o fluxo de preview para
 
 Nao use preview como final. Nao trate preview low como upscale automatico. Se a continuidade visual for importante, use o preview escolhido como referencia de edicao quando o ambiente aceitar imagem de entrada; caso contrario, regerar com prompt refinado.
 
-## Qualidade final
+## Qualidade e formato final (SEMPRE perguntar)
 
-Antes da imagem final, pergunte explicitamente:
+Antes de QUALQUER imagem final, **pergunte sempre** ao usuario qual `quality` e qual `size`/formato
+usar. Pode (e deve) **recomendar** uma opcao, mas a decisao e do usuario — nunca assuma sozinho.
+Pergunte as duas coisas juntas, por exemplo:
 
-> "Voce quer gerar a imagem final em `quality: high`?"
+> "Qual `quality` e formato pra imagem final? Recomendo `quality: medium` e `1024x1536` (vertical),
+>  mas voce decide. Quer outro?"
 
-Recomende:
+Mesmo que o usuario tenha dito "gere direto" (sem preview), isso pula o preview — **mas a pergunta
+de quality/formato continua obrigatoria**. So nao pergunte se o usuario JA tiver especificado
+explicitamente o quality E o formato nesta conversa.
+
+### Recomendacoes de quality (recomende, nao imponha)
 
 - `medium` como padrao para assets comuns, fundos, texturas, mockups simples, imagens que ficarao atras de texto ou imagens pequenas no layout.
 - `high` para capa, hero, imagem que ocupa grande parte da arte, mockup/produto com alta nitidez, asset reutilizavel fora do projeto ou quando o `medium` ficar visualmente fraco.
 - `low` somente para preview, rascunho ou validacao rapida.
+
+### Recomendacoes de formato/size (recomende, nao imponha)
+
+- `1024x1536` (vertical / 3:4) para feed e stories de Instagram, criativos de anuncio verticais, carrossel.
+- `1536x1024` (horizontal / 4:3) para capa, banner, hero landscape.
+- `1024x1024` (quadrado / 1:1) para post quadrado, avatar, thumbnail. Lembrar: no gpt-image-2 o
+  quadrado tende a sair mais caro que os retangulares.
 
 Se o usuario responder "nao" para high, use `medium` salvo se ele pedir outro valor.
 
